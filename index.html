@@ -1,491 +1,104 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aquaponics Club</title>
-    <style>
-        /* --- Global Styles --- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            scroll-behavior: smooth;
-        }
-
-        body {
-            background-color: #f4f7f6;
-            color: #333;
-            line-height: 1.6;
-        }
-
-        /* --- Navigation --- */
-        header {
-            background-color: #1b4332;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1rem 2rem;
-        }
-
-        .logo {
-            color: #40916c;
-            font-size: 1.5rem;
-            font-weight: bold;
-            text-decoration: none;
-        }
-
-        .logo span {
-            color: #52b788;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-        }
-
-        .nav-links li {
-            margin-left: 2rem;
-        }
-
-        .nav-links a {
-            color: #d8f3dc;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: #74c69d;
-        }
-
-        /* --- Sections General --- */
-        section {
-            padding: 5rem 2rem 3rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 2.5rem;
-            color: #1b4332;
-            margin-bottom: 3rem;
-            position: relative;
-        }
-
-        .section-title::after {
-            content: '';
-            display: block;
-            width: 50px;
-            height: 4px;
-            background-color: #52b788;
-            margin: 10px auto 0 auto;
-            border-radius: 2px;
-        }
-
-        /* --- Home Section --- */
-        #home {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            min-height: 90vh;
-            padding-top: 7rem;
-        }
-
-        .hero-text {
-            flex: 1;
-            padding-right: 2rem;
-        }
-
-        .hero-text h1 {
-            font-size: 3.5rem;
-            color: #1b4332;
-            line-height: 1.2;
-            margin-bottom: 1.5rem;
-        }
-
-        .hero-text p {
-            font-size: 1.1rem;
-            color: #555;
-            margin-bottom: 2rem;
-        }
-
-        .btn {
-            display: inline-block;
-            background-color: #40916c;
-            color: white;
-            padding: 0.8rem 2rem;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: 600;
-            transition: background 0.3s;
-        }
-
-        .btn:hover {
-            background-color: #2d6a4f;
-        }
-
-        .hero-image {
-            flex: 1;
-            text-align: center;
-        }
-
-        .hero-image img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 15px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-
-        /* --- Gallery Section --- */
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .gallery-item {
-            position: relative;
-            overflow: hidden;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-            height: 250px;
-            background-color: #ddd; /* Fallback color */
-        }
-
-        .gallery-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .gallery-item:hover img {
-            transform: scale(1.05);
-        }
-
-        .gallery-caption {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: linear-gradient(transparent, rgba(0,0,0,0.8));
-            color: white;
-            padding: 1.5rem 1rem 1rem 1rem;
-            font-size: 1.1rem;
-        }
-
-        /* --- Committee Chart Section --- */
-        .chart-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2rem;
-        }
-
-        .chart-row {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-            width: 100%;
-        }
-
-        .member-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            width: 240px;
-            text-align: center;
-            border-top: 5px solid #40916c;
-        }
-
-        .member-card.tier-1 { border-top-color: #1b4332; width: 280px; }
-        .member-card.tier-2 { border-top-color: #2d6a4f; }
-
-        .member-avatar {
-            width: 80px;
-            height: 80px;
-            background-color: #e2e8f0;
-            border-radius: 50%;
-            margin: 0 auto 1rem auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: #718096;
-        }
-
-        .member-role {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #52b788;
-            font-weight: bold;
-            margin-bottom: 0.3rem;
-        }
-
-        .member-name {
-            font-size: 1.2rem;
-            color: #2d3748;
-            font-weight: 600;
-        }
-
-        /* --- Contact Section --- */
-        .contact-wrapper {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            background: white;
-            padding: 3rem;
-            border-radius: 15px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-        }
-
-        .contact-info h3 {
-            color: #1b4332;
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-        }
-
-        .contact-info p {
-            margin-bottom: 1.5rem;
-            color: #666;
-        }
-
-        .info-details div {
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .contact-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1.2rem;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .form-group label {
-            margin-bottom: 0.4rem;
-            font-weight: 500;
-            color: #444;
-        }
-
-        .form-group input, .form-group textarea {
-            padding: 0.8rem;
-            border: 1px solid #cdd5d1;
-            border-radius: 5px;
-            outline: none;
-            font-size: 1rem;
-            transition: border 0.3s;
-        }
-
-        .form-group input:focus, .form-group textarea:focus {
-            border-color: #40916c;
-        }
-
-        .contact-form .btn {
-            border: none;
-            cursor: pointer;
-            align-self: flex-start;
-        }
-
-        /* --- Footer --- */
-        footer {
-            background-color: #1b4332;
-            color: #d8f3dc;
-            text-align: center;
-            padding: 2rem;
-            margin-top: 5rem;
-            font-size: 0.9rem;
-        }
-
-        /* --- Responsive Design --- */
-        @media (max-width: 768px) {
-            #home {
-                flex-direction: column;
-                text-align: center;
-                padding-top: 6rem;
-            }
-            .hero-text {
-                padding-right: 0;
-                margin-bottom: 3rem;
-            }
-            .hero-text h1 {
-                font-size: 2.5rem;
-            }
-            .contact-wrapper {
-                grid-template-columns: 1fr;
-                padding: 2rem;
-            }
-            .nav-links {
-                display: none; /* Simple fallback for mobile menu space */
-            }
-        }
-    </style>
-</head>
-<body>
-
-    <!-- Navigation Bar -->
-    <header>
-        <nav class="navbar">
-            <a href="#home" class="logo">Aqua<span>Club</span></a>
-            <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#gallery">Gallery</a></li>
-                <li><a href="#committee">Committee</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <!-- Home / Hero Section -->
-    <section id="home">
-        <div class="hero-text">
-            <h1>Cultivating the Future of Sustainable Farming</h1>
-            <p>Welcome to the Aquaponics Club! We combine aquaculture (raising fish) and hydroponics (growing plants without soil) into one elegant, closed-loop ecosystem. Join us to learn, build, and innovate.</p>
-            <a href="#contact" class="btn">Join Our Club</a>
-        </div>
-        <div class="hero-image">
-            <!-- Placeholder image for ecosystem visualization -->
-            <img src="https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&w=600&q=80" alt="Aquaponics System">
-        </div>
-    </section>
-
-    <!-- Gallery Section -->
-    <section id="gallery">
-        <h2 class="section-title">Our Gallery</h2>
-        <div class="gallery-grid">
-            <div class="gallery-item">
-                <img src="https://images.unsplash.com/photo-1530595467537-0b5996c41f2d?auto=format&fit=crop&w=500&q=80" alt="Hydroponic Greens">
-                <div class="gallery-caption">Our Hydroponic NFT System</div>
-            </div>
-            <div class="gallery-item">
-                <img src="https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?auto=format&fit=crop&w=500&q=80" alt="Fish Tank">
-                <div class="gallery-caption">Healthy Tilapia Tanks</div>
-            </div>
-            <div class="gallery-item">
-                <img src="https://images.unsplash.com/photo-1508615070457-7baebe4003ab?auto=format&fit=crop&w=500&q=80" alt="Seedlings">
-                <div class="gallery-caption">Sprouting New Seedlings</div>
-            </div>
-            <div class="gallery-item">
-                <img src="https://images.unsplash.com/photo-1536882240095-0379873feb4e?auto=format&fit=crop&w=500&q=80" alt="Water Testing">
-                <div class="gallery-caption">Weekly Water Quality Monitoring</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Committee Chart Section -->
-    <section id="committee">
-        <h2 class="section-title">Committee Chart</h2>
-        <div class="chart-container">
-            
-            <!-- Tier 1: Leadership -->
-            <div class="chart-row">
-                <div class="member-card tier-1">
-                    <div class="member-avatar">👑</div>
-                    <div class="member-role">President</div>
-                    <div class="member-name">Alex Tan</div>
-                </div>
-            </div>
-
-            <!-- Tier 2: Core Executives -->
-            <div class="chart-row">
-                <div class="member-card tier-2">
-                    <div class="member-avatar">📋</div>
-                    <div class="member-role">Vice President</div>
-                    <div class="member-name">Sarah Lim</div>
-                </div>
-                <div class="member-card tier-2">
-                    <div class="member-avatar">✍️</div>
-                    <div class="member-role">Secretary</div>
-                    <div class="member-name">Chloe Wong</div>
-                </div>
-                <div class="member-card tier-2">
-                    <div class="member-avatar">💰</div>
-                    <div class="member-role">Finance Officer</div>
-                    <div class="member-name">Boon Hee</div>
-                </div>
-            </div>
-
-            <!-- Tier 3: Department Heads -->
-            <div class="chart-row">
-                <div class="member-card">
-                    <div class="member-avatar">🐟</div>
-                    <div class="member-role">Fish Care Head</div>
-                    <div class="member-name">Ryan Lau</div>
-                </div>
-                <div class="member-card">
-                    <div class="member-avatar">🌱</div>
-                    <div class="member-role">Plant Cultivation Head</div>
-                    <div class="member-name">Emily Tay</div>
-                </div>
-                <div class="member-card">
-                    <div class="member-avatar">🛠️</div>
-                    <div class="member-role">System & Maintenance</div>
-                    <div class="member-name">Jayden Teh</div>
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact">
-        <h2 class="section-title">Get in Touch</h2>
-        <div class="contact-wrapper">
-            <div class="contact-info">
-                <h3>Connect With Us</h3>
-                <p>Have questions about setting up your own ecosystem or want to collaborate with our club? Drop us a message!</p>
-                <div class="info-details">
-                    <div>📍 <strong>Location:</strong> Agriculture Lab / Greenhouse Block</div>
-                    <div>✉️ <strong>Email:</strong> aquaponicsclub@school.edu</div>
-                    <div>🕒 <strong>Meetups:</strong> Every Wednesday, 3:00 PM - 5:00 PM</div>
-                </div>
-            </div>
-            
-            <form class="contact-form" action="#" method="POST" onsubmit="alert('Thank you for reaching out!'); return false;">
-                <div class="form-group">
-                    <label for="name">Name</label>
-                    <input type="text" id="name" placeholder="Your Full Name" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" placeholder="Your Email Address" required>
-                </div>
-                <div class="form-group">
-                    <label for="message">Message</label>
-                    <textarea id="message" rows="5" placeholder="How can we help you?" required></textarea>
-                </div>
-                <button type="submit" class="btn">Send Message</button>
-            </form>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2026 Aquaponics Club. Growing together sustainably.</p>
-    </footer>
-
-</body>
-</html>
+<p>&nbsp;</p>
+<!-- Navigation Bar --><header><nav class="navbar"><a class="logo" href="#home">Aquaponics Club HEBB</a>
+<ul class="nav-links">
+<li><a href="#home">Home</a></li>
+<li><a href="#gallery">Gallery</a></li>
+<li><a href="#committee">Committee</a></li>
+<li><a href="#contact">Contact</a></li>
+</ul>
+</nav></header><!-- Home / Hero Section -->
+<section id="home">
+<div class="hero-text">
+<h1>Cultivating the Future of Sustainable Farming</h1>
+<p>Welcome to the Aquaponics Club! We combine aquaculture (raising fish) and hydroponics (growing plants without soil) into one elegant, closed-loop ecosystem. Join us to learn, build, and innovate.</p>
+<a class="btn" href="#contact">Learn More</a></div>
+<div class="hero-image"><!-- Placeholder image for ecosystem visualization --> <img src="https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&amp;fit=crop&amp;w=600&amp;q=80" alt="Aquaponics System" /></div>
+</section>
+<!-- Gallery Section -->
+<section id="gallery">
+<h2 class="section-title">Our Gallery</h2>
+<div class="gallery-grid">
+<div class="gallery-item"><img src="https://images.unsplash.com/photo-1530595467537-0b5996c41f2d?auto=format&amp;fit=crop&amp;w=500&amp;q=80" alt="Hydroponic Greens" />
+<div class="gallery-caption">Our Aquaponic NFT System</div>
+</div>
+<div class="gallery-item"><img src="https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?auto=format&amp;fit=crop&amp;w=500&amp;q=80" alt="Fish Tank" />
+<div class="gallery-caption">Healthy Tilapia Tanks</div>
+</div>
+<div class="gallery-item"><img src="https://images.unsplash.com/photo-1508615070457-7baebe4003ab?auto=format&amp;fit=crop&amp;w=500&amp;q=80" alt="Seedlings" />
+<div class="gallery-caption">Sprouting New Seedlings</div>
+</div>
+<div class="gallery-item"><img src="https://images.unsplash.com/photo-1536882240095-0379873feb4e?auto=format&amp;fit=crop&amp;w=500&amp;q=80" alt="Water Testing" />
+<div class="gallery-caption">Weekly Water Quality Monitoring</div>
+</div>
+</div>
+</section>
+<!-- Committee Chart Section -->
+<section id="committee">
+<h2 class="section-title">Committee Chart</h2>
+<div class="chart-container"><!-- Tier 1: Leadership -->
+<div class="chart-row">
+<div class="member-card tier-1">
+<div class="member-avatar">👑</div>
+<div class="member-role">President</div>
+<div class="member-name">Cheang Boon Hee</div>
+</div>
+</div>
+<!-- Tier 2: Core Executives -->
+<div class="chart-row">
+<div class="member-card tier-2">
+<div class="member-avatar">📋</div>
+<div class="member-role">Vice President</div>
+<div class="member-name">Labuhee</div>
+</div>
+<div class="member-card tier-2">
+<div class="member-avatar">✍️</div>
+<div class="member-role">Secretary</div>
+<div class="member-name">BH Cheang</div>
+</div>
+<div class="member-card tier-2">
+<div class="member-avatar">💰</div>
+<div class="member-role">Finance Officer</div>
+<div class="member-name">Boon Hee</div>
+</div>
+</div>
+<!-- Tier 3: Department Heads -->
+<div class="chart-row">
+<div class="member-card">
+<div class="member-avatar">🐟</div>
+<div class="member-role">Fish Care Head</div>
+<div class="member-name">BH Cheang</div>
+</div>
+<div class="member-card">
+<div class="member-avatar">🌱</div>
+<div class="member-role">Plant Cultivation Head</div>
+<div class="member-name">Joyce</div>
+</div>
+<div class="member-card">
+<div class="member-avatar">🛠️</div>
+<div class="member-role">System &amp; Maintenance</div>
+<div class="member-name">Char Bee Hoon</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Contact Section -->
+<section id="contact">
+<h2 class="section-title">Get in Touch</h2>
+<div class="contact-wrapper">
+<div class="contact-info">
+<h3>Connect With Us</h3>
+<p>Have questions about setting up your own ecosystem or want to collaborate with our club? Drop us a message!</p>
+<div class="info-details">
+<div>📍 <strong>Location:&nbsp;1, Jalan Sungai Tiram 1, Kampung Sungai Tiram, 11900 Bayan Lepas, Pulau Pinang</strong></div>
+<div>✉️ <strong>Email:</strong> aquaponicsclub@school.edu</div>
+</div>
+</div>
+<form class="contact-form" action="#" method="POST">
+<div class="form-group"><label for="name"><br />Name</label> <input id="name" required="" type="text" placeholder="Your Full Name" /></div>
+<div class="form-group"><label for="email">Email</label> <input id="email" required="" type="email" placeholder="Your Email Address" /></div>
+<div class="form-group"><label for="message">Message</label> <textarea id="message" required="" rows="5" placeholder="How can we help you?"></textarea></div>
+<button class="btn" type="submit">Send Message</button></form></div>
+</section>
+<!-- Footer --><footer>
+<p>&copy; 2026 Aquaponics Club. Growing together sustainably.</p>
+</footer>
