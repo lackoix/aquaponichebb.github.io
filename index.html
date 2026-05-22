@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Aquaponics Club</title>
-        <style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aquaponics Club</title>
+    <style>
         /* --- Global Styles --- */
         * {
             margin: 0;
@@ -150,44 +150,6 @@
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
 
-        /* --- Gallery Section --- */
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .gallery-item {
-            position: relative;
-            overflow: hidden;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-            height: 250px;
-            background-color: #ddd; /* Fallback color */
-        }
-
-        .gallery-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .gallery-item:hover img {
-            transform: scale(1.05);
-        }
-
-        .gallery-caption {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: linear-gradient(transparent, rgba(0,0,0,0.8));
-            color: white;
-            padding: 1.5rem 1rem 1rem 1rem;
-            font-size: 1.1rem;
-        }
-
         /* --- Committee Chart Section --- */
         .chart-container {
             display: flex;
@@ -310,16 +272,6 @@
             align-self: flex-start;
         }
 
-        /* --- Footer --- */
-        footer {
-            background-color: #1b4332;
-            color: #d8f3dc;
-            text-align: center;
-            padding: 2rem;
-            margin-top: 5rem;
-            font-size: 0.9rem;
-        }
-
         /* --- Responsive Design --- */
         @media (max-width: 768px) {
             #home {
@@ -339,151 +291,122 @@
                 padding: 2rem;
             }
             .nav-links {
-                display: none; /* Simple fallback for mobile menu space */
+                display: none;
             }
         }
     </style>
-    </head>
-    <body>
-        <!-- Navigation Bar -->
-        <header>
-            <nav class="navbar">
-                <a href="#home" class="logo">Aquaponics<span>Club</span></a>
-                <ul class="nav-links">
-                    <li>
-                        <a href="#home">Home</a>
-                    </li>
-                    <li>
-                        <a href="#gallery">Gallery</a>
-                    </li>
-                    <li>
-                        <a href="#committee">Committee</a>
-                    </li>
-                    <li>
-                        <a href="#contact">Contact</a>
-                    </li>
-                </ul>
-            </nav>
-        </header>
-        <!-- Home / Hero Section -->
-        <section id="home">
-            <div class="hero-text">
-                <h1>Cultivating the Future of Sustainable Farming</h1>
-                <p>Welcome to the Aquaponics Club! We combine aquaculture (raising fish) and hydroponics (growing plants without soil) into one elegant, closed-loop ecosystem. Join us to learn, build, and innovate.</p>
-                <a href="#contact" class="btn">Learn More</a>
-            </div>
-            <div class="hero-image">
-                <!-- Placeholder image for ecosystem visualization -->
-                <img src="https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&w=600&q=80" alt="Aquaponics System">
-            </div>
-        </section>
-        <!-- Gallery Section -->
-        <section id="gallery">
-            <h2 class="section-title">Our Gallery</h2>
-            <div class="gallery-grid">
-                <div class="gallery-item">
-                    <img src="https://images.unsplash.com/photo-1530595467537-0b5996c41f2d?auto=format&fit=crop&w=500&q=80" alt="Hydroponic Greens">
-                    <div class="gallery-caption">Our Hydroponic NFT System</div>
-                </div>
-                <div class="gallery-item">
-                    <img src="https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?auto=format&fit=crop&w=500&q=80" alt="Fish Tank">
-                    <div class="gallery-caption">Healthy Tilapia Tanks</div>
-                </div>
-                <div class="gallery-item">
-                    <img src="https://images.unsplash.com/photo-1508615070457-7baebe4003ab?auto=format&fit=crop&w=500&q=80" alt="Seedlings">
-                    <div class="gallery-caption">Sprouting New Seedlings</div>
-                </div>
-                <div class="gallery-item">
-                    <img src="https://images.unsplash.com/photo-1536882240095-0379873feb4e?auto=format&fit=crop&w=500&q=80" alt="Water Testing">
-                    <div class="gallery-caption">Weekly Water Quality Monitoring</div>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <header>
+        <nav class="navbar">
+            <a href="#home" class="logo">Aquaponics<span>Club</span></a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="#committee">Committee</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Home / Hero Section -->
+    <section id="home">
+        <div class="hero-text">
+            <h1>Cultivating the Future of Sustainable Farming</h1>
+            <p>Welcome to the Aquaponics Club! We combine aquaculture (raising fish) and hydroponics (growing plants without soil) into one elegant, closed-loop ecosystem. Join us to learn, build, and innovate.</p>
+            <a href="#contact" class="btn">Learn More</a>
+        </div>
+        <div class="hero-image">
+            <img src="https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&w=600&q=80" alt="Aquaponics System">
+        </div>
+    </section>
+
+    <!-- Committee Chart Section -->
+    <section id="committee">
+        <h2 class="section-title">Committee Chart</h2>
+        <div class="chart-container">
+            <!-- Tier 1 -->
+            <div class="chart-row">
+                <div class="member-card tier-1">
+                    <div class="member-avatar">👑</div>
+                    <div class="member-role">President</div>
+                    <div class="member-name">Cheang Boon Hee</div>
                 </div>
             </div>
-        </section>
-        <!-- Committee Chart Section -->
-        <section id="committee">
-            <h2 class="section-title">Committee Chart</h2>
-            <div class="chart-container">
-                <!-- Tier 1: Leadership -->
-                <div class="chart-row">
-                    <div class="member-card tier-1">
-                        <div class="member-avatar">👑</div>
-                        <div class="member-role">President</div>
-                        <div class="member-name">Cheang Boon Hee</div>
-                    </div>
+            <!-- Tier 2 -->
+            <div class="chart-row">
+                <div class="member-card tier-2">
+                    <div class="member-avatar">📋</div>
+                    <div class="member-role">Vice President</div>
+                    <div class="member-name">Labuhee</div>
                 </div>
-                <!-- Tier 2: Core Executives -->
-                <div class="chart-row">
-                    <div class="member-card tier-2">
-                        <div class="member-avatar">📋</div>
-                        <div class="member-role">Vice President</div>
-                        <div class="member-name">Labuhee</div>
-                    </div>
-                    <div class="member-card tier-2">
-                        <div class="member-avatar">✍️</div>
-                        <div class="member-role">Secretary</div>
-                        <div class="member-name">Char Bee Hoon</div>
-                    </div>
-                    <div class="member-card tier-2">
-                        <div class="member-avatar">💰</div>
-                        <div class="member-role">Finance Officer</div>
-                        <div class="member-name">Boon Hee</div>
-                    </div>
+                <div class="member-card tier-2">
+                    <div class="member-avatar">✍️</div>
+                    <div class="member-role">Secretary</div>
+                    <div class="member-name">Char Bee Hoon</div>
                 </div>
-                <!-- Tier 3: Department Heads -->
-                <div class="chart-row">
-                    <div class="member-card">
-                        <div class="member-avatar">🐟</div>
-                        <div class="member-role">Fish Care Head</div>
-                        <div class="member-name">BH Cheang</div>
-                    </div>
-                    <div class="member-card">
-                        <div class="member-avatar">🌱</div>
-                        <div class="member-role">Plant Cultivation Head</div>
-                        <div class="member-name">Cheang BH</div>
-                    </div>
-                    <div class="member-card">
-                        <div class="member-avatar">🛠️</div>
-                        <div class="member-role">System & Maintenance</div>
-                        <div class="member-name">Joyce Ooi</div>
-                    </div>
+                <div class="member-card tier-2">
+                    <div class="member-avatar">💰</div>
+                    <div class="member-role">Finance Officer</div>
+                    <div class="member-name">Boon Hee</div>
                 </div>
             </div>
-        </section>
-        <!-- Contact Section -->
-        <section id="contact">
-            <h2 class="section-title">Get in Touch</h2>
-            <div class="contact-wrapper">
-                <div class="contact-info">
-                    <h3>Connect With Us</h3>
-                    <p>Have questions about setting up your own ecosystem or want to collaborate with our club? Drop us a message!</p>
-                    <div class="info-details">
-                        <div>📍 <strong>Location:</strong>1, Jalan Sungai Tiram 1, Kampung Sungai Tiram, 11900 Bayan Lepas, Pulau Pinang
-                        </div>
-                        <div>✉️ <strong>Email:</strong> aquaponicsclub@school.edu
-                        </div>
-                        
-                    </div>
+            <!-- Tier 3 -->
+            <div class="chart-row">
+                <div class="member-card">
+                    <div class="member-avatar">🐟</div>
+                    <div class="member-role">Fish Care Head</div>
+                    <div class="member-name">BH Cheang</div>
                 </div>
-                <form class="contact-form" action="#" method="POST" onsubmit="alert('Thank you for reaching out!'); return false;">
-                    <div class="form-group">
-                        <label for="name">Name</label>
-                        <input type="text" id="name" placeholder="Your Full Name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" placeholder="Your Email Address" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="message">Message</label>
-                        <textarea id="message" rows="5" placeholder="How can we help you?" required></textarea>
-                    </div>
-                    <button type="submit" class="btn">Send Message</button>
-                </form>
+                <div class="member-card">
+                    <div class="member-avatar">🌱</div>
+                    <div class="member-role">Plant Cultivation Head</div>
+                    <div class="member-name">Cheang BH</div>
+                </div>
+                <div class="member-card">
+                    <div class="member-avatar">🛠️</div>
+                    <div class="member-role">System & Maintenance</div>
+                    <div class="member-name">Joyce Ooi</div>
+                </div>
             </div>
-        </section>
-        <!-- Footer -->
-        <footer>
-            <p>&copy; 2026 Aquaponics Club. Growing together sustainably.</p>
-        </footer>
-    </body>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <h2 class="section-title">Get in Touch</h2>
+        <div class="contact-wrapper">
+            <div class="contact-info">
+                <h3>Connect With Us</h3>
+                <p>Have questions about setting up your own ecosystem or want to collaborate with our club? Drop us a message!</p>
+                <div class="info-details">
+                    <div>📍 <strong>Location:</strong> 1, Jalan Sungai Tiram 1, Kampung Sungai Tiram, 11900 Bayan Lepas, Pulau Pinang</div>
+                    <div>✉️ <strong>Email:</strong> aquaponicsclub@school.edu</div>
+                </div>
+            </div>
+            <form class="contact-form" action="#" method="POST" onsubmit="alert('Thank you for reaching out!'); return false;">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" placeholder="Your Full Name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="Your Email Address" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" rows="5" placeholder="How can we help you?" required></textarea>
+                </div>
+                <button type="submit" class="btn">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Aquaponics Club. Growing together sustainably.</p>
+    </footer>
+</body>
 </html>
