@@ -6,33 +6,50 @@
     <title>Gallery | Aquaponics Club</title>
     <style>
         body { font-family: sans-serif; background: #f9f9f9; padding: 20px; margin: 0; }
+        .nav { margin-bottom: 30px; }
+        .nav a { text-decoration: none; color: #2e7d32; font-weight: bold; font-size: 1.2rem; }
         .folder-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1000px; margin: 0 auto; }
         .card { background: #fff; padding: 20px; border-radius: 12px; border: 1px solid #ddd; cursor: pointer; transition: 0.3s; }
         .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-        .img-placeholder { height: 200px; background: #eee; display: flex; align-items: center; justify-content: center; border-radius: 8px; }
         
-        /* Lightbox Styles */
+        /* Slideshow area inside card */
+        .ss-container { height: 200px; position: relative; border-radius: 8px; overflow: hidden; background: #eee; }
+        .slide { position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1s; }
+        .slide.active { opacity: 1; }
+
+        /* Lightbox */
         #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; flex-wrap: wrap; overflow-y: auto; }
         #lightbox img { max-width: 80%; margin: 10px; border-radius: 8px; }
         .close { position: fixed; top: 20px; right: 30px; color: white; font-size: 40px; cursor: pointer; }
-        .wip-text { color: white; font-size: 2rem; }
     </style>
 </head>
 <body>
 
+    <div class="nav"><a href="index.html">← Back to Home</a></div>
+
     <div class="folder-grid">
-        <div class="card" onclick="openLightbox(['https://imgur.com/a/ujWoLpD', 'https://imgur.com/a/4xNTnHB'])">
+        <div class="card" onclick="openLightbox(['https://i.imgur.com/h8l9ch7.jpeg', 'https://i.imgur.com/PmQ9skh.jpeg'])">
             <h2>📂 Club Activities</h2>
-            <div class="img-placeholder">Click to view photos</div>
+            <div class="ss-container" id="ss1">
+                <img class="slide active" src="https://i.imgur.com/h8l9ch7.jpeg">
+                <img class="slide" src="https://i.imgur.com/PmQ9skh.jpeg">
+            </div>
         </div>
 
-        <div class="card" onclick="openLightbox(['https://imgur.com/a/53R5vsT', 'https://imgur.com/a/6oJp1LQ'])">
+        <div class="card" onclick="openLightbox(['https://i.imgur.com/tGdPGd0.jpeg', 'https://i.imgur.com/sDSAy6j.jpeg'])">
             <h2>👥 Members & Team</h2>
-            <div class="img-placeholder">Click to view photos</div>
+            <div class="ss-container" id="ss2">
+                <img class="slide active" src="https://i.imgur.com/tGdPGd0.jpeg">
+                <img class="slide" src="https://i.imgur.com/sDSAy6j.jpeg">
+            </div>
         </div>
 
-        <div class="card" onclick="openLightbox(['https://imgur.com/a/Jm77mlV','https://imgur.com/a/pcl7Q4b'])"> <h2>🛠️ System & Tech</h2>
-            <div class="img-placeholder">Click to view photos</div>
+        <div class="card" onclick="openLightbox(['https://i.imgur.com/g3efDAd.jpeg','https://i.imgur.com/iF6EgXb.jpeg'])">
+            <h2>🛠️ System & Tech</h2>
+            <div class="ss-container" id="ss3">
+                <img class="slide active" src="https://i.imgur.com/g3efDAd.jpeg">
+                <img class="slide" src="https://i.imgur.com/iF6EgXb.jpeg">
+            </div>
         </div>
     </div>
 
@@ -42,17 +59,23 @@
     </div>
 
     <script>
+        // Slideshow logic
+        function startSS(id) {
+            let container = document.getElementById(id);
+            let slides = container.querySelectorAll('.slide');
+            let i = 0;
+            setInterval(() => {
+                slides[i].classList.remove('active');
+                i = (i + 1) % slides.length;
+                slides[i].classList.add('active');
+            }, 3000);
+        }
+        startSS('ss1'); startSS('ss2'); startSS('ss3');
+
+        // Lightbox logic
         function openLightbox(images) {
             const container = document.getElementById('lightbox-content');
-            container.innerHTML = ''; // Clear previous
-            
-            if (images.length === 0) {
-                container.innerHTML = '<div class="wip-text">🚧 Work In Progress</div>';
-            } else {
-                images.forEach(src => {
-                    container.innerHTML += `<img src="${src}">`;
-                });
-            }
+            container.innerHTML = images.map(src => `<img src="${src}">`).join('');
             document.getElementById('lightbox').style.display = 'flex';
         }
     </script>
