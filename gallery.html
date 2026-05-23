@@ -7,19 +7,27 @@
     <style>
         body { font-family: sans-serif; background: #f9f9f9; margin: 0; padding-bottom: 40px; }
         
-        /* Mobile-Ready Navigation */
-        .nav { 
-            background: white; 
-            padding: 20px; 
+        /* Sticky Mobile Header */
+        header { 
             width: 100%; 
+            background: white; 
+            padding: 15px 20px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+            position: sticky; 
+            top: 0; 
+            z-index: 999; 
             box-sizing: border-box; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            margin-bottom: 30px;
         }
-        .nav a { text-decoration: none; color: #2e7d32; font-weight: bold; font-size: 1.2rem; display: inline-block; }
+        header a { 
+            text-decoration: none; 
+            color: #2e7d32; 
+            font-weight: bold; 
+            font-size: 1.2rem; 
+            display: block; 
+        }
 
         /* Grid Layout */
-        .folder-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+        .folder-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1000px; margin: 30px auto; padding: 0 20px; }
         .card { background: #fff; padding: 20px; border-radius: 12px; border: 1px solid #ddd; cursor: pointer; transition: 0.3s; }
         .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
         
@@ -36,7 +44,9 @@
 </head>
 <body>
 
-    <div class="nav"><a href="index.html">← Back to Home</a></div>
+    <header>
+        <a href="index.html">← Back to Home</a>
+    </header>
 
     <div class="folder-grid">
         <div class="card" onclick="openLightbox(['https://i.imgur.com/h8l9ch7.jpeg', 'https://i.imgur.com/PmQ9skh.jpeg'])">
@@ -70,9 +80,9 @@
     </div>
 
     <script>
-        // Slideshow Engine
         function startSS(id) {
             let container = document.getElementById(id);
+            if(!container) return;
             let slides = container.querySelectorAll('.slide');
             let i = 0;
             setInterval(() => {
@@ -83,7 +93,6 @@
         }
         startSS('ss1'); startSS('ss2'); startSS('ss3');
 
-        // Lightbox Engine
         function openLightbox(images) {
             const container = document.getElementById('lightbox-content');
             container.innerHTML = images.map(src => `<img src="${src}">`).join('');
