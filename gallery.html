@@ -3,221 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Media Gallery | Aquaponics Club</title>
+    <title>Gallery | Aquaponics Club</title>
     <style>
-        :root {
-            --primary: #2e7d32;
-            --primary-light: #e8f5e9;
-            --text-dark: #333333;
-            --text-light: #666666;
-            --bg-light: #f9f9f9;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: var(--bg-light);
-            color: var(--text-dark);
-        }
-
-        /* Navigation Bar */
-        .navbar {
-            background-color: #ffffff;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .navbar-brand {
-            font-weight: bold;
-            font-size: 1.4rem;
-            color: var(--primary);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .navbar-links {
-            display: flex;
-            gap: 20px;
-        }
-
-        .navbar-links a {
-            text-decoration: none;
-            color: var(--text-light);
-            font-weight: 500;
-            transition: color 0.2s;
-        }
-
-        .navbar-links a:hover, .navbar-links a.active {
-            color: var(--primary);
-        }
-
-        /* Header Section */
-        .gallery-header {
-            text-align: center;
-            padding: 3rem 1rem 1.5rem 1rem;
-            background: linear-gradient(180deg, var(--primary-light) 0%, var(--bg-light) 100%);
-        }
-
-        .gallery-header h1 {
-            margin: 0 0 10px 0;
-            font-size: 2.5rem;
-            color: var(--primary);
-        }
-
-        .gallery-header p {
-            margin: 0 auto;
-            max-width: 600px;
-            color: var(--text-light);
-            font-size: 1.1rem;
-        }
-
-        /* 3-Column Grid Layout matching the screenshot */
-        .folder-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
-            padding: 40px 20px 60px 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-            box-sizing: border-box;
-        }
-
-        /* The Outer White Card */
-        .gallery-card {
-            background: #ffffff;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Card Header Layout */
-        .card-header-row {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 8px;
-        }
-
-        .card-icon {
-            font-size: 24px;
-        }
-
-        .card-title {
-            margin: 0;
-            font-size: 1.25rem;
-            color: var(--text-dark);
-            font-weight: 600;
-        }
-
-        .card-desc {
-            font-size: 0.9rem;
-            color: var(--text-light);
-            margin: 0 0 20px 0;
-            line-height: 1.5;
-            min-height: 42px; /* Keeps text blocks aligned evenly */
-        }
-
-        /* The Inner Image Box (Replaces the 403 Error Box) */
-        .image-container {
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            overflow: hidden;
-            height: 260px; /* Matches the approximate height of your old iframe */
-            background-color: #f8fafc;
-            position: relative;
-        }
-
-        .image-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* Ensures the image fills the box without stretching */
-            transition: transform 0.3s ease;
-        }
-
-        .image-container:hover img {
-            transform: scale(1.05); /* Slight zoom effect when hovering over the picture */
-        }
-
-        footer {
-            text-align: center;
-            padding: 2rem;
-            background-color: #ffffff;
-            border-top: 1px solid #e2e8f0;
-            color: var(--text-light);
-            font-size: 0.9rem;
-        }
+        body { font-family: sans-serif; background: #f9f9f9; padding: 20px; margin: 0; }
+        .folder-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1000px; margin: 0 auto; }
+        .card { background: #fff; padding: 20px; border-radius: 12px; border: 1px solid #ddd; cursor: pointer; transition: 0.3s; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .img-placeholder { height: 200px; background: #eee; display: flex; align-items: center; justify-content: center; border-radius: 8px; }
+        
+        /* Lightbox Styles */
+        #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; flex-wrap: wrap; overflow-y: auto; }
+        #lightbox img { max-width: 80%; margin: 10px; border-radius: 8px; }
+        .close { position: fixed; top: 20px; right: 30px; color: white; font-size: 40px; cursor: pointer; }
+        .wip-text { color: white; font-size: 2rem; }
     </style>
 </head>
 <body>
 
-    <nav class="navbar">
-        <a href="index.html" class="navbar-brand">🌱 Aquaponics Club</a>
-        <div class="navbar-links">
-            <a href="index.html">Home</a>
-            <a href="gallery.html" class="active">Gallery</a>
+    <div class="folder-grid">
+        <div class="card" onclick="openLightbox(['https://imgur.com/a/ujWoLpD', 'https://imgur.com/a/4xNTnHB'])">
+            <h2>📂 Club Activities</h2>
+            <div class="img-placeholder">Click to view photos</div>
         </div>
-    </nav>
 
-    <header class="gallery-header">
-        <h1>Club Media Vault</h1>
-        <p>Highlights and snapshots from our latest projects and operations.</p>
-    </header>
+        <div class="card" onclick="openLightbox(['https://imgur.com/a/53R5vsT', 'https://imgur.com/a/6oJp1LQ'])">
+            <h2>👥 Members & Team</h2>
+            <div class="img-placeholder">Click to view photos</div>
+        </div>
 
-    <main class="folder-grid">
-        
-        <div class="gallery-card">
-            <div class="card-header-row">
-                <span class="card-icon">📂</span>
-                <h2 class="card-title">Club Activities</h2>
-            </div>
-            <p class="card-desc">Photos and updates from our weekly workshops, monitoring runs, and setup builds.</p>
+        <div class="card" onclick="openLightbox(['https://imgur.com/a/Jm77mlV','https://imgur.com/a/pcl7Q4b'])"> <h2>🛠️ System & Tech</h2>
+            <div class="img-placeholder">Click to view photos</div>
+        </div>
+    </div>
+
+    <div id="lightbox" onclick="this.style.display='none'">
+        <span class="close">&times;</span>
+        <div id="lightbox-content"></div>
+    </div>
+
+    <script>
+        function openLightbox(images) {
+            const container = document.getElementById('lightbox-content');
+            container.innerHTML = ''; // Clear previous
             
-            <div class="image-container">
-                <img src="https://images.unsplash.com/photo-1530595467537-0b5996c41f2d?auto=format&fit=crop&w=600&q=80" alt="Club Activities Showcase">
-            </div>
-        </div>
-
-        <div class="gallery-card">
-            <div class="card-header-row">
-                <span class="card-icon">👥</span>
-                <h2 class="card-title">Members & Team</h2>
-            </div>
-            <p class="card-desc">Group highlights, committee dynamic profiles, and standout team snapshots.</p>
-            
-            <div class="image-container">
-                <img src="https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?auto=format&fit=crop&w=600&q=80" alt="Members and Team">
-            </div>
-        </div>
-
-        <div class="gallery-card">
-            <div class="card-header-row">
-                <span class="card-icon">🛠️</span>
-                <h2 class="card-title">System & Tech</h2>
-            </div>
-            <p class="card-desc">Close-up tracking of physical plumbing, tank infrastructure, filtration, and layout designs.</p>
-            
-            <div class="image-container">
-                <img src="https://images.unsplash.com/photo-1508615070457-7baebe4003ab?auto=format&fit=crop&w=600&q=80" alt="System and Technology">
-            </div>
-        </div>
-
-    </main>
-
-    <footer>
-        <p>&copy; 2026 Aquaponics Club. Images hosted locally.</p>
-    </footer>
-
+            if (images.length === 0) {
+                container.innerHTML = '<div class="wip-text">🚧 Work In Progress</div>';
+            } else {
+                images.forEach(src => {
+                    container.innerHTML += `<img src="${src}">`;
+                });
+            }
+            document.getElementById('lightbox').style.display = 'flex';
+        }
+    </script>
 </body>
 </html>
