@@ -5,22 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gallery | Aquaponics Club</title>
     <style>
-        body { font-family: sans-serif; background: #f9f9f9; padding: 20px; margin: 0; }
-        .nav { margin-bottom: 30px; }
-        .nav a { text-decoration: none; color: #2e7d32; font-weight: bold; font-size: 1.2rem; }
-        .folder-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1000px; margin: 0 auto; }
+        body { font-family: sans-serif; background: #f9f9f9; margin: 0; padding-bottom: 40px; }
+        
+        /* Mobile-Ready Navigation */
+        .nav { 
+            background: white; 
+            padding: 20px; 
+            width: 100%; 
+            box-sizing: border-box; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+        .nav a { text-decoration: none; color: #2e7d32; font-weight: bold; font-size: 1.2rem; display: inline-block; }
+
+        /* Grid Layout */
+        .folder-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1000px; margin: 0 auto; padding: 0 20px; }
         .card { background: #fff; padding: 20px; border-radius: 12px; border: 1px solid #ddd; cursor: pointer; transition: 0.3s; }
         .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
         
-        /* Slideshow area inside card */
+        /* Slideshow */
         .ss-container { height: 200px; position: relative; border-radius: 8px; overflow: hidden; background: #eee; }
         .slide { position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1s; }
         .slide.active { opacity: 1; }
 
         /* Lightbox */
-        #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; flex-wrap: wrap; overflow-y: auto; }
+        #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; justify-content: center; align-items: center; flex-wrap: wrap; overflow-y: auto; }
         #lightbox img { max-width: 80%; margin: 10px; border-radius: 8px; }
-        .close { position: fixed; top: 20px; right: 30px; color: white; font-size: 40px; cursor: pointer; }
+        .close { position: fixed; top: 20px; right: 30px; color: white; font-size: 40px; cursor: pointer; z-index: 1001; }
     </style>
 </head>
 <body>
@@ -59,7 +70,7 @@
     </div>
 
     <script>
-        // Slideshow logic
+        // Slideshow Engine
         function startSS(id) {
             let container = document.getElementById(id);
             let slides = container.querySelectorAll('.slide');
@@ -72,7 +83,7 @@
         }
         startSS('ss1'); startSS('ss2'); startSS('ss3');
 
-        // Lightbox logic
+        // Lightbox Engine
         function openLightbox(images) {
             const container = document.getElementById('lightbox-content');
             container.innerHTML = images.map(src => `<img src="${src}">`).join('');
