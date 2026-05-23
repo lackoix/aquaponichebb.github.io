@@ -21,7 +21,7 @@
             color: var(--text-dark);
         }
 
-        /* Navigation Bar Styling */
+        /* Navigation */
         .navbar {
             background-color: #ffffff;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -39,148 +39,153 @@
             font-size: 1.4rem;
             color: var(--primary);
             text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .navbar-links {
-            display: flex;
-            gap: 20px;
         }
 
         .navbar-links a {
             text-decoration: none;
             color: var(--text-light);
+            margin-left: 20px;
             font-weight: 500;
-            transition: color 0.2s;
         }
 
-        .navbar-links a:hover, .navbar-links a.active {
+        .navbar-links a.active {
             color: var(--primary);
         }
 
-        /* Header Section */
+        /* Header */
         .gallery-header {
             text-align: center;
-            padding: 3rem 1rem 1.5rem 1rem;
+            padding: 3rem 1rem;
             background: linear-gradient(180deg, var(--primary-light) 0%, var(--bg-light) 100%);
         }
 
         .gallery-header h1 {
+            color: var(--primary);
             margin: 0 0 10px 0;
             font-size: 2.5rem;
-            color: var(--primary);
         }
 
-        .gallery-header p {
-            margin: 0 auto;
-            max-width: 600px;
-            color: var(--text-light);
-            font-size: 1.1rem;
-        }
-
-        /* Folder Grid Configuration */
-        .folder-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
-            padding: 30px 20px 60px 20px;
+        /* Gallery Sections */
+        .gallery-container {
             max-width: 1200px;
             margin: 0 auto;
-            box-sizing: border-box;
-        }
-
-        /* Entire card acts as a clean, clickable button link */
-        .folder-card-clickable {
-            background: #ffffff;
-            border-radius: 14px;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
-            overflow: hidden;
             padding: 20px;
-            display: flex;
-            flex-direction: column;
-            text-decoration: none; /* Removes link underline */
-            color: inherit;
-            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
         }
 
-        .folder-card-clickable:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(46, 125, 50, 0.12);
-            border-color: var(--primary);
+        .category-section {
+            margin-bottom: 50px;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
         }
 
-        .folder-header-row {
+        .category-title {
+            font-size: 1.8rem;
+            color: var(--text-dark);
+            border-bottom: 2px solid var(--primary-light);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 10px;
+            gap: 10px;
         }
 
-        .folder-icon {
-            font-size: 28px;
+        /* Image Grid */
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
         }
 
-        .folder-title {
-            margin: 0;
-            font-size: 1.25rem;
-            color: var(--text-dark);
-            font-weight: 600;
-            transition: color 0.2s;
-        }
-
-        .folder-card-clickable:hover .folder-title {
-            color: var(--primary);
-        }
-
-        .folder-desc {
-            font-size: 0.92rem;
-            color: var(--text-light);
-            margin: 0 0 18px 0;
-            line-height: 1.4;
-            min-height: 40px;
-        }
-
-        /* Static Visual Showcase Window (Replacing broken frames) */
-        .folder-cover-preview {
+        .grid-item {
             width: 100%;
-            height: 220px;
-            border-radius: 10px;
+            height: 200px;
+            border-radius: 8px;
             overflow: hidden;
-            border: 1px solid #edf2f7;
-            background-color: #f7fafc;
+            cursor: pointer;
             position: relative;
         }
 
-        .folder-cover-preview img {
+        .grid-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.4s ease;
+            transition: transform 0.3s ease;
         }
 
-        .folder-card-clickable:hover .folder-cover-preview img {
-            transform: scale(1.04);
+        .grid-item:hover img {
+            transform: scale(1.08);
         }
 
-        /* Subtle "Click to view" indicator flag at bottom of card */
-        .view-indicator {
-            margin-top: 15px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--primary);
+        /* Dark overlay icon on hover */
+        .grid-item::after {
+            content: '🔍';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            color: white;
+            font-size: 2rem;
             display: flex;
+            justify-content: center;
             align-items: center;
-            gap: 4px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .grid-item:hover::after {
+            opacity: 1;
+        }
+
+        /* --- Fullscreen Lightbox Modal --- */
+        #lightbox {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            justify-content: center;
+            align-items: center;
+        }
+
+        #lightbox img {
+            max-width: 90%;
+            max-height: 90vh;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            animation: zoomIn 0.3s ease;
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .close-btn:hover {
+            color: var(--primary);
         }
 
         footer {
             text-align: center;
             padding: 2rem;
-            background-color: #ffffff;
-            border-top: 1px solid #e2e8f0;
             color: var(--text-light);
             font-size: 0.9rem;
         }
@@ -198,52 +203,86 @@
 
     <header class="gallery-header">
         <h1>Club Media Vault</h1>
-        <p>Select a category folder below to browse our live image collections directly via Google Drive storage.</p>
+        <p>Click any photo to view it in full screen.</p>
     </header>
 
-    <main class="folder-grid">
+    <div class="gallery-container">
         
-        <a href="https://drive.google.com/drive/folders/1KrGj9DsBiI42135pOizSnWfPmuumyFzq?usp=sharing" target="_blank" class="folder-card-clickable">
-            <div class="folder-header-row">
-                <span class="folder-icon">📂</span>
-                <h2 class="folder-title">Club Activities</h2>
+        <section class="category-section">
+            <h2 class="category-title">📂 Club Activities</h2>
+            <div class="image-grid">
+                <div class="grid-item" onclick="openLightbox(this)">
+                    <img src="https://drive.google.com/uc?export=view&id=1XyZw9_FileID_Example_1" alt="Activity Photo">
+                </div>
+                <div class="grid-item" onclick="openLightbox(this)">
+                    <img src="https://drive.google.com/uc?export=view&id=1XyZw9_FileID_Example_2" alt="Activity Photo">
+                </div>
+                <div class="grid-item" onclick="openLightbox(this)">
+                    <img src="https://drive.google.com/uc?export=view&id=1XyZw9_FileID_Example_3" alt="Activity Photo">
+                </div>
             </div>
-            <p class="folder-desc">Photos and updates from our weekly workshops, monitoring runs, and setup builds.</p>
-            <div class="folder-cover-preview">
-                <img src="https://images.unsplash.com/photo-1530595467537-0b5996c41f2d?auto=format&fit=crop&w=500&q=80" alt="Club Activities Preview">
-            </div>
-            <div class="view-indicator">Open Drive Folder ↗</div>
-        </a>
+        </section>
 
-        <a href="https://drive.google.com/drive/folders/1vrW9doVF-I3DOj49bVkGuDo18nGgihwK?usp=sharing" target="_blank" class="folder-card-clickable">
-            <div class="folder-header-row">
-                <span class="folder-icon">👥</span>
-                <h2 class="folder-title">Members & Team</h2>
+        <section class="category-section">
+            <h2 class="category-title">👥 Members & Team</h2>
+            <div class="image-grid">
+                <div class="grid-item" onclick="openLightbox(this)">
+                    <img src="https://drive.google.com/uc?export=view&id=1XyZw9_FileID_Example_4" alt="Team Photo">
+                </div>
+                <div class="grid-item" onclick="openLightbox(this)">
+                    <img src="https://drive.google.com/uc?export=view&id=1XyZw9_FileID_Example_5" alt="Team Photo">
+                </div>
             </div>
-            <p class="folder-desc">Group highlights, committee dynamic profiles, and standout team snapshots.</p>
-            <div class="folder-cover-preview">
-                <img src="https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?auto=format&fit=crop&w=500&q=80" alt="Members & Team Preview">
-            </div>
-            <div class="view-indicator">Open Drive Folder ↗</div>
-        </a>
+        </section>
 
-        <a href="https://drive.google.com/drive/folders/1ebkuwD1v3yEA9iTpvWNyBadjLzJrbgio?usp=sharing" target="_blank" class="folder-card-clickable">
-            <div class="folder-header-row">
-                <span class="folder-icon">🛠️</span>
-                <h2 class="folder-title">System & Tech</h2>
+        <section class="category-section">
+            <h2 class="category-title">🛠️ System & Tech</h2>
+            <div class="image-grid">
+                <div class="grid-item" onclick="openLightbox(this)">
+                    <img src="https://drive.google.com/uc?export=view&id=1XyZw9_FileID_Example_6" alt="Tech Photo">
+                </div>
+                <div class="grid-item" onclick="openLightbox(this)">
+                    <img src="https://drive.google.com/uc?export=view&id=1XyZw9_FileID_Example_7" alt="Tech Photo">
+                </div>
             </div>
-            <p class="folder-desc">Close-up tracking of physical plumbing, tank infrastructure, filtration, and layout designs.</p>
-            <div class="folder-cover-preview">
-                <img src="https://images.unsplash.com/photo-1508615070457-7baebe4003ab?auto=format&fit=crop&w=500&q=80" alt="System & Tech Preview">
-            </div>
-            <div class="view-indicator">Open Drive Folder ↗</div>
-        </a>
+        </section>
 
-    </main>
+    </div>
+
+    <div id="lightbox" onclick="closeLightbox()">
+        <span class="close-btn">&times;</span>
+        <img id="lightbox-img" src="" alt="Full Screen Image">
+    </div>
 
     <footer>
-        <p>&copy; 2026 Aquaponics Club. Secure shared cloud galleries powered by Google Drive.</p>
+        <p>&copy; 2026 Aquaponics Club. Images hosted via direct Google Drive links.</p>
     </footer>
+
+    <script>
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+
+        function openLightbox(element) {
+            // Get the image source from the clicked grid item
+            const imageSrc = element.querySelector('img').src;
+            lightboxImg.src = imageSrc;
+            lightbox.style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // Stop background scrolling
+        }
+
+        function closeLightbox() {
+            lightbox.style.display = 'none';
+            lightboxImg.src = '';
+            document.body.style.overflow = 'auto'; // Enable scrolling again
+        }
+
+        // Close when pressing the Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape") {
+                closeLightbox();
+            }
+        });
+    </script>
 
 </body>
 </html>
