@@ -7,7 +7,7 @@
     <style>
         body { font-family: sans-serif; background-color: #f4f7f6; margin: 0; padding: 0; }
         
-        /* Simplified Header (No fixed/sticky to avoid mobile bugs) */
+        /* Header */
         header { 
             background-color: #1b4332; 
             padding: 20px; 
@@ -21,6 +21,7 @@
             font-weight: bold; 
         }
 
+        /* Folder Grid */
         .folder-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; max-width: 1000px; margin: 20px auto; padding: 0 20px; }
         .card { background: #fff; padding: 20px; border-radius: 12px; border: 1px solid #ddd; cursor: pointer; }
         
@@ -28,9 +29,11 @@
         .slide { position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1s; }
         .slide.active { opacity: 1; }
 
-        #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; justify-content: center; align-items: center; }
-        #lightbox img { max-width: 90%; max-height: 80vh; margin: 10px; border-radius: 8px; object-fit: contain; }
-        .close { position: fixed; top: 20px; right: 20px; color: white; font-size: 40px; cursor: pointer; }
+        /* Lightbox - Grid Collage */
+        #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; padding: 60px 20px; overflow-y: auto; }
+        #lightbox-content { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; max-width: 1000px; margin: 0 auto; }
+        #lightbox-content img { width: 100%; height: 250px; object-fit: cover; border-radius: 8px; cursor: pointer; }
+        .close { position: fixed; top: 20px; right: 20px; color: white; font-size: 40px; cursor: pointer; z-index: 1001; }
     </style>
 </head>
 <body>
@@ -53,6 +56,9 @@
             <div class="ss-container" id="ss2">
                 <img class="slide active" src="https://i.imgur.com/tGdPGd0.jpeg">
                 <img class="slide" src="https://i.imgur.com/sDSAy6j.jpeg">
+                <img class="slide" src="https://i.imgur.com/N3NQmYa.png">
+                <img class="slide" src="https://i.imgur.com/sgsm3aS.png">
+                <img class="slide" src="https://i.imgur.com/5ClpeL8.png">
             </div>
         </div>
 
@@ -86,8 +92,8 @@
 
         function openLightbox(images) {
             const container = document.getElementById('lightbox-content');
-            container.innerHTML = images.map(src => `<img src="${src}">`).join('');
-            document.getElementById('lightbox').style.display = 'flex';
+            container.innerHTML = images.map(src => `<img src="${src}" onclick="event.stopPropagation()">`).join('');
+            document.getElementById('lightbox').style.display = 'block';
         }
     </script>
 </body>
