@@ -23,7 +23,7 @@
 
         /* Folder Grid */
         .folder-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; max-width: 1000px; margin: 20px auto; padding: 0 20px; }
-        .card { background: #fff; padding: 20px; border-radius: 12px; border: 1px solid #ddd; cursor: pointer; }
+        .card { background: #fff; padding: 20px; border-radius: 12px; border: none; cursor: pointer; }
         
         .ss-container { height: 200px; position: relative; border-radius: 8px; overflow: hidden; background: #eee; }
         .slide { position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1s; }
@@ -146,7 +146,6 @@
         window.addEventListener("touchend", cancelPress);
 
         function startPress(e) {
-            // Prevent accidental firing when selecting text, clicking cards, headers, or inside lightbox
             if (e.target.closest('.card') || e.target.closest('header') || e.target.closest('#lightbox')) return;
             
             pressTimer = window.setTimeout(() => {
