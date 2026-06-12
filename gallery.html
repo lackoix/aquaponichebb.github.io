@@ -23,7 +23,6 @@
 
         /* Folder Grid */
         .folder-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; max-width: 1000px; margin: 20px auto; padding: 0 20px; }
-        /* Restored original folder card border */
         .card { background: #fff; padding: 20px; border-radius: 12px; border: 1px solid #ddd; cursor: pointer; }
         
         .ss-container { height: 200px; position: relative; border-radius: 8px; overflow: hidden; background: #eee; }
@@ -33,7 +32,6 @@
         /* Lightbox - Grid Collage */
         #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; padding: 60px 20px; overflow-y: auto; }
         #lightbox-content { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; max-width: 1000px; margin: 0 auto; }
-        /* Restored original lightbox image styles */
         #lightbox-content img { width: 100%; height: 250px; object-fit: cover; border-radius: 8px; cursor: pointer; }
         .close { position: fixed; top: 20px; right: 20px; color: white; font-size: 40px; cursor: pointer; z-index: 1001; }
 
@@ -54,9 +52,9 @@
             pointer-events: auto;
             cursor: pointer;
             animation: swayDance 1.2s ease-in-out infinite;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: none; /* Removed the shadow that created the border effect */
             border-radius: 15px;
-            border: none; /* Explicitly ensures the easter egg has no border */
+            border: none;
         }
     </style>
 </head>
