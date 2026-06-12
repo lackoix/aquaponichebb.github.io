@@ -98,6 +98,7 @@
     </div>
 
     <script>
+        // Slideshow Engine
         function startSS(id) {
             let container = document.getElementById(id);
             if(!container) return;
@@ -111,42 +112,62 @@
         }
         startSS('ss1'); startSS('ss2'); startSS('ss3');
 
+        // Lightbox Engine
         function openLightbox(images) {
             const container = document.getElementById('lightbox-content');
             container.innerHTML = images.map(src => `<img src="${src}" onclick="event.stopPropagation()">`).join('');
             document.getElementById('lightbox').style.display = 'block';
         }
 
-        /* --- Easter Egg Code --- */
-        let secretCode = "labuhee";
-        let inputBuffer = "";
+        /* --- Combined Hybrid Easter Egg Trigger --- */
+        const targetSequence = ['l', 'a', 'b', 'u', 'h', 'e', 'e'];
+        let currentSequence = [];
 
+        // 1. Desktop Track: Keyboard Sequence Matcher
         window.addEventListener("keydown", (e) => {
-            inputBuffer += e.key.toLowerCase();
+            const key = e.key.toLowerCase(); 
+            currentSequence.push(key);
             
-            // Keep the buffer matching the length of our code
-            if (inputBuffer.length > secretCode.length) {
-                inputBuffer = inputBuffer.slice(-secretCode.length);
+            if (currentSequence.length > targetSequence.length) {
+                currentSequence.shift();
             }
 
-            if (inputBuffer === secretCode) {
+            if (JSON.stringify(currentSequence) === JSON.stringify(targetSequence)) {
                 triggerEasterEgg();
-                inputBuffer = ""; // Reset buffer
+                currentSequence = []; 
             }
         });
 
+        // 2. Mobile Track: Background Press-and-Hold (3 Seconds)
+        let pressTimer;
+        window.addEventListener("mousedown", startPress);
+        window.addEventListener("touchstart", startPress, { passive: true });
+        window.addEventListener("mouseup", cancelPress);
+        window.addEventListener("touchend", cancelPress);
+
+        function startPress(e) {
+            // Prevent accidental firing when selecting text, clicking cards, headers, or inside lightbox
+            if (e.target.closest('.card') || e.target.closest('header') || e.target.closest('#lightbox')) return;
+            
+            pressTimer = window.setTimeout(() => {
+                triggerEasterEgg();
+            }, 3000); 
+        }
+
+        function cancelPress() {
+            clearTimeout(pressTimer);
+        }
+
+        // Execution Logic
         function triggerEasterEgg() {
-            // Check if one already exists to avoid duplication
             if (document.getElementById("easter-egg-pic")) return;
 
             let img = document.createElement("img");
-            // Change the src below to your preferred dancing image URL
             img.src = "https://i.imgur.com/ZsOgoZP.png"; 
             img.className = "dancing-egg";
             img.id = "easter-egg-pic";
             img.title = "Click me to dismiss!";
 
-            // Remove it when clicked
             img.addEventListener("click", () => {
                 img.remove();
             });
