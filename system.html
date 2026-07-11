@@ -5,11 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Systems | Aquaponics Club</title>
     <style>
+        /* --- Global Styles --- */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            scroll-behavior: smooth;
         }
 
         body {
@@ -29,6 +31,7 @@
             z-index: 1000;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
+
         .navbar {
             display: flex;
             justify-content: space-between;
@@ -37,26 +40,30 @@
             margin: 0 auto;
             padding: 1rem 2rem;
         }
+
         .logo {
             color: #40916c;
             font-size: 1.5rem;
             font-weight: bold;
             text-decoration: none;
         }
+
         .logo span { color: #52b788; }
         .nav-links { display: flex; list-style: none; }
         .nav-links li { margin-left: 2rem; }
+        
         .nav-links a {
             color: #d8f3dc;
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s;
         }
+
         .nav-links a:hover { color: #74c69d; }
 
-        /* --- Content Layout --- */
+        /* --- Main Content Layout --- */
         .container {
-            max-width: 900px;
+            max-width: 1100px;
             margin: 40px auto;
             padding: 0 20px;
         }
@@ -65,23 +72,45 @@
             text-align: center;
             color: #1b4332;
             font-size: 2.5rem;
-            margin-bottom: 40px;
+            margin-bottom: 50px;
+            position: relative;
         }
 
-        /* System Blocks */
-        .system-block {
+        .page-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background-color: #52b788;
+            margin: 10px auto 0 auto;
+            border-radius: 2px;
+        }
+
+        /* --- Zigzag Alternating Rows --- */
+        .system-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 60px;
             background: white;
-            border-radius: 12px;
             padding: 30px;
-            margin-bottom: 40px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            border-top: 5px solid #40916c;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+            align-items: center;
+        }
+
+        /* Video Block (Combines Name + Video container) */
+        .video-block {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
 
         .system-name {
             color: #1b4332;
             font-size: 1.8rem;
-            margin-bottom: 20px;
+            border-bottom: 2px solid #52b788;
+            padding-bottom: 5px;
         }
 
         .video-wrapper {
@@ -91,7 +120,7 @@
             overflow: hidden;
             border-radius: 8px;
             background: #000;
-            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
         }
 
         .video-wrapper iframe {
@@ -103,13 +132,41 @@
             border: none;
         }
 
+        /* Explanation Block */
+        .explanation-block {
+            padding: 10px;
+        }
+
+        .explanation-block h3 {
+            color: #2d6a4f;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
         .system-description {
             color: #555;
             font-size: 1.05rem;
             text-align: justify;
         }
 
-        /* Footer */
+        /* --- Responsive View for Mobile Screens --- */
+        @media (max-width: 768px) {
+            .system-row {
+                grid-template-columns: 1fr; /* Stacks vertically on phone screens */
+                gap: 25px;
+                padding: 20px;
+            }
+            
+            /* Forces text back under video on smaller screens for natural scrolling */
+            .system-row:nth-child(even) .video-block {
+                order: 0;
+            }
+            .system-row:nth-child(even) .explanation-block {
+                order: 1;
+            }
+        }
+
+        /* --- Footer --- */
         footer {
             background-color: #1b4332;
             color: #d8f3dc;
@@ -122,6 +179,7 @@
 </head>
 <body>
 
+    <!-- Navigation Header -->
     <header>
         <nav class="navbar">
             <a href="index.html#home" class="logo">Aquaponics<span>Club</span></a>
@@ -138,24 +196,85 @@
     <div class="container">
         <h1 class="page-title">Our Aquaponics Systems</h1>
 
-        <div class="system-block">
-            <h2 class="system-name">1. Nutrient Film Technique (NFT) Setup</h2>
-            <div class="video-wrapper">
-                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+        <!-- ================= SECTION 1: DWC (Left: Video, Right: Exp) ================= -->
+        <div class="system-row">
+            <div class="video-block">
+                <h2 class="system-name">1. Deep Water Culture (DWC)</h2>
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/3Ior2S7S_LY" allowfullscreen></iframe>
+                </div>
             </div>
-            <p class="system-description">
-                This section contains the description text for System 1. You can add clear paragraphs detailing how the closed-loop process works here, detailing technical choices, biological balances, and maintenance routines.
-            </p>
+            <div class="explanation-block">
+                <h3>How It Works</h3>
+                <p class="system-description">
+                    Deep Water Culture (DWC), also known as a raft system, uses a floating platform (usually foam) to support plants so their roots remain constantly suspended directly into nutrient-rich water. High volume aeration is pumped through airstones directly into the water bed to ensure that plant roots never suffocate. This system is incredibly stable for temperature management and is exceptionally popular for mass-producing leafy vegetables like lettuce.
+                </p>
+            </div>
         </div>
 
-        <div class="system-block">
-            <h2 class="system-name">2. Media-Filled Grow Bed System</h2>
-            <div class="video-wrapper">
-                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+        <!-- ================= SECTION 2: NFT (Left: Exp, Right: Video) ================= -->
+        <div class="system-row">
+            <!-- To make it visually alternate, we put the explanation block first in HTML -->
+            <div class="explanation-block">
+                <h3>How It Works</h3>
+                <p class="system-description">
+                    The Nutrient Film Technique (NFT) system continuously circulates a very shallow, thin stream—or "film"—of nutrient water down long, slightly tilted channels. The bare roots of the plants sit directly in this flowing film inside waterproof gullies. Because the film is shallow, the top section of the plant roots stays humid but exposed to open air, receiving an exceptional amount of oxygen while the bottom tip absorbs constant water and feed.
+                </p>
             </div>
-            <p class="system-description">
-                This section contains the description text for System 2. Perfect for heavier root systems and biological filtration processing, utilizing expanded clay or gravel configurations.
-            </p>
+            <div class="video-block">
+                <h2 class="system-name">2. Nutrient Film Technique (NFT)</h2>
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/8ME8v8Q8XpI" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= SECTION 3: VERTICAL TOWER (Left: Video, Right: Exp) ================= -->
+        <div class="system-row">
+            <div class="video-block">
+                <h2 class="system-name">3. Vertical Tower System</h2>
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/j_n6S_m6h_U" allowfullscreen></iframe>
+                </div>
+            </div>
+            <div class="explanation-block">
+                <h3>How It Works</h3>
+                <p class="system-description">
+                    Vertical towers stack growing pockets upward into a columns format to drastically maximize output in highly limited geographic space. Water is fed directly up to the top of the central column assembly before trickling downwards via gravity, washing past suspended root bundles along the inner core. It utilizes zero soil and can multiply yield footprint efficiency up to several times over traditional standard horizontal grow designs.
+                </p>
+            </div>
+        </div>
+
+        <!-- ================= SECTION 4: MEDIA BED (Left: Exp, Right: Video) ================= -->
+        <div class="system-row">
+            <div class="explanation-block">
+                <h3>How It Works</h3>
+                <p class="system-description">
+                    Media beds utilize heavy structural trays packed with inert elements such as expanded clay pebbles, volcanic rocks, or gravel to physically anchor plant base paths. This layout regularly cycles water up and down utilizing auto-siphons (Bell Siphons), creating a flood-and-drain mechanism. The physical media acts simultaneously as an incredibly robust biological filter zone, capturing solid fish waste and providing massive surface space for nitrifying bacteria.
+                </p>
+            </div>
+            <div class="video-block">
+                <h2 class="system-name">4. Media-Filled Grow Bed</h2>
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/4SWe_m9W8B8" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= SECTION 5: FISH TANK (Left: Video, Right: Exp) ================= -->
+        <div class="system-row">
+            <div class="video-block">
+                <h2 class="system-name">5. Aquaculture Fish Tank Unit</h2>
+                <div class="video-wrapper">
+                    <iframe src="https://www.youtube.com/embed/6_9M3UvYI8w" allowfullscreen></iframe>
+                </div>
+            </div>
+            <div class="explanation-block">
+                <h3>How It Works</h3>
+                <p class="system-description">
+                    The aquaculture tank is the biological engine room powering the whole club ecosystem. This holds our stock species, generating vital ammonia inputs via metabolic digestion products. It requires regular water velocity parameters, precise food calculation profiles, and mechanical filtration dumps to route solid components safely out into active bacterial processing channels before reaching plant roots.
+                </p>
+            </div>
         </div>
 
     </div>
