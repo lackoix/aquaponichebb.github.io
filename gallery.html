@@ -70,8 +70,7 @@
         <div class="card" onclick="openDriveFolder('activities')">
             <h2>📂 Club Activities</h2>
             <div class="ss-container" id="ss1">
-                <img class="slide active" src="https://i.imgur.com/h8l9ch7.jpeg">
-                <img class="slide" src="https://i.imgur.com/PmQ9skh.jpeg">
+                <p style="text-align: center; line-height: 200px; color: #888; margin: 0;">Loading images...</p>
             </div>
         </div>
 
@@ -79,11 +78,7 @@
         <div class="card" onclick="openDriveFolder('members')">
             <h2>👥 Members & Team</h2>
             <div class="ss-container" id="ss2">
-                <img class="slide active" src="https://i.imgur.com/tGdPGd0.jpeg">
-                <img class="slide" src="https://i.imgur.com/sDSAy6j.jpeg">
-                <img class="slide" src="https://i.imgur.com/KfmPwA5.png">
-                <img class="slide" src="https://i.imgur.com/0Vybwjz.png">
-                <img class="slide" src="https://i.imgur.com/d3YDvPq.png">
+                <p style="text-align: center; line-height: 200px; color: #888; margin: 0;">Loading images...</p>
             </div>
         </div>
 
@@ -91,8 +86,7 @@
         <div class="card" onclick="openDriveFolder('system')">
             <h2>🛠️ System & Tech</h2>
             <div class="ss-container" id="ss3">
-                <img class="slide active" src="https://i.imgur.com/g3efDAd.jpeg">
-                <img class="slide" src="https://i.imgur.com/iF6EgXb.jpeg">
+                <p style="text-align: center; line-height: 200px; color: #888; margin: 0;">Loading images...</p>
             </div>
         </div>
     </div>
@@ -104,21 +98,62 @@
     </div>
 
     <script>
-      // ================= CONFIGURATION =================
-const API_KEY = 'AIzaSyB0fIi4GLS5F5Z20FJuf2JO29x2nU5rrSw'; // Replace with your fresh API key
+        // ================= CONFIGURATION =================
+        const API_KEY = 'AIzaSyB0fIi4GLS5F5Z20FJuf2JO29x2nU5rrSw'; // Remember to restrict this key in Google Cloud Console!
 
-const DRIVE_FOLDERS = {
-    activities: '1MuxHw4UUTsGtrYPa648xU822QEnCa7Hdq',  // Club Activities Folder
-    members:    '1Xm7k88iXb93bKLOrVJb7H5Bvxg4dXmcg', // Members Folder
-    system:     '1Lfg85X814iHl3_pQeFeFyL9XuHLTgdV1'  // System and Tech Folder
-};
-// =================================================
+        const DRIVE_FOLDERS = {
+            activities: '1789a81odqFd4iL5u3QBNP97JjbZBDdHdq',  // Club Activities Folder
+            members:    '1Xm7k88iXb93bKLOrVJb7H5Bvxg4dXmcg', // Members Folder
+            system:     '1Lfg85X814iHl3_pQeFeFyL9XuHLTgdV1'  // System and Tech Folder
+        };
+        // =================================================
 
-        // Slideshow Engine
+        // 1. Core Fetcher to grab image URLs from any Drive Folder ID
+        async function fetchDriveImages(folderId) {
+            const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+mimeType+contains+'image/'&fields=files(id,name)&key=${API_KEY}`;
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                if (data.files && data.files.length > 0) {
+                    return data.files.map(file => `https://drive.google.com/thumbnail?id=${file.id}&sz=w1200`);
+                }
+            } catch (error) {
+                console.error('Error fetching Drive folder:', error);
+            }
+            return [];
+        }
+
+        // 2. Load Google Drive images directly into the Card Preview Slideshows
+        async function loadCardSlideshows() {
+            const categories = [
+                { key: 'activities', ssId: 'ss1' },
+                { key: 'members', ssId: 'ss2' },
+                { key: 'system', ssId: 'ss3' }
+            ];
+
+            for (const cat of categories) {
+                const images = await fetchDriveImages(DRIVE_FOLDERS[cat.key]);
+                const container = document.getElementById(cat.ssId);
+
+                if (container && images.length > 0) {
+                    container.innerHTML = images.map((src, index) => 
+                        `<img class="slide ${index === 0 ? 'active' : ''}" src="${src}">`
+                    ).join('');
+
+                    startSS(cat.ssId);
+                } else if (container) {
+                    container.innerHTML = '<p style="text-align: center; line-height: 200px; color: #888; margin: 0;">No preview images</p>';
+                }
+            }
+        }
+
+        // 3. Slideshow Rotation Engine
         function startSS(id) {
             let container = document.getElementById(id);
-            if(!container) return;
+            if (!container) return;
             let slides = container.querySelectorAll('.slide');
+            if (slides.length <= 1) return;
+
             let i = 0;
             setInterval(() => {
                 slides[i].classList.remove('active');
@@ -126,36 +161,26 @@ const DRIVE_FOLDERS = {
                 slides[i].classList.add('active');
             }, 3000);
         }
-        startSS('ss1'); startSS('ss2'); startSS('ss3');
 
-        // Google Drive Fetcher + Lightbox Engine
+        // 4. Open Lightbox on Card Click (Google Drive API)
         async function openDriveFolder(categoryKey) {
             const folderId = DRIVE_FOLDERS[categoryKey];
             const container = document.getElementById('lightbox-content');
             
-            // Show loading state inside the lightbox
             container.innerHTML = '<p style="color: white; text-align: center; grid-column: 1/-1; font-size: 1.2rem;">Loading pictures from Google Drive...</p>';
             document.getElementById('lightbox').style.display = 'block';
 
-            // Query Google Drive API v3 for images in the folder
-            const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+mimeType+contains+'image/'&fields=files(id,name)&key=${API_KEY}`;
+            const imageUrls = await fetchDriveImages(folderId);
 
-            try {
-                const response = await fetch(url);
-                const data = await response.json();
-
-                if (data.files && data.files.length > 0) {
-                    // Turn image IDs into direct thumbnails
-                    const imageUrls = data.files.map(file => `https://drive.google.com/thumbnail?id=${file.id}&sz=w1200`);
-                    container.innerHTML = imageUrls.map(src => `<img src="${src}" onclick="event.stopPropagation()">`).join('');
-                } else {
-                    container.innerHTML = '<p style="color: white; text-align: center; grid-column: 1/-1;">No images found in this Google Drive folder yet!</p>';
-                }
-            } catch (error) {
-                console.error('Drive API Error:', error);
-                container.innerHTML = '<p style="color: #ff6b6b; text-align: center; grid-column: 1/-1;">Failed to load images. Please check your API key & folder sharing permissions!</p>';
+            if (imageUrls.length > 0) {
+                container.innerHTML = imageUrls.map(src => `<img src="${src}" onclick="event.stopPropagation()">`).join('');
+            } else {
+                container.innerHTML = '<p style="color: white; text-align: center; grid-column: 1/-1;">No images found in this Google Drive folder yet!</p>';
             }
         }
+
+        // Initialize slideshows when page DOM is ready
+        window.addEventListener('DOMContentLoaded', loadCardSlideshows);
 
         /* --- Combined Hybrid Easter Egg Trigger --- */
         const targetSequence = ['l', 'a', 'b', 'u', 'h', 'e', 'e'];
