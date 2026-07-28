@@ -13,6 +13,7 @@
             padding: 20px; 
             text-align: center; 
             width: 100%;
+            box-sizing: border-box;
         }
         header a { 
             color: #d8f3dc; 
@@ -30,7 +31,7 @@
         .slide.active { opacity: 1; }
 
         /* Lightbox - Grid Collage */
-        #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; padding: 60px 20px; overflow-y: auto; }
+        #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; padding: 60px 20px; overflow-y: auto; box-sizing: border-box; }
         #lightbox-content { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; max-width: 1000px; margin: 0 auto; }
         #lightbox-content img { width: 100%; height: 250px; object-fit: cover; border-radius: 8px; cursor: pointer; }
         .close { position: fixed; top: 20px; right: 20px; color: white; font-size: 40px; cursor: pointer; z-index: 1001; }
@@ -52,7 +53,7 @@
             pointer-events: auto;
             cursor: pointer;
             animation: swayDance 1.2s ease-in-out infinite;
-            box-shadow: none; /* Removed the shadow that created the border effect */
+            box-shadow: none;
             border-radius: 15px;
             border: none;
         }
@@ -65,7 +66,8 @@
     </header>
 
     <div class="folder-grid">
-        <div class="card" onclick="openLightbox(['https://i.imgur.com/h8l9ch7.jpeg', 'https://i.imgur.com/PmQ9skh.jpeg'])">
+        <!-- Card 1: Activities -->
+        <div class="card" onclick="openDriveFolder('activities')">
             <h2>📂 Club Activities</h2>
             <div class="ss-container" id="ss1">
                 <img class="slide active" src="https://i.imgur.com/h8l9ch7.jpeg">
@@ -73,7 +75,8 @@
             </div>
         </div>
 
-        <div class="card" onclick="openLightbox(['https://i.imgur.com/tGdPGd0.jpeg', 'https://i.imgur.com/sDSAy6j.jpeg','https://i.imgur.com/KfmPwA5.png','https://i.imgur.com/0Vybwjz.png','https://i.imgur.com/d3YDvPq.png'])">
+        <!-- Card 2: Members -->
+        <div class="card" onclick="openDriveFolder('members')">
             <h2>👥 Members & Team</h2>
             <div class="ss-container" id="ss2">
                 <img class="slide active" src="https://i.imgur.com/tGdPGd0.jpeg">
@@ -84,7 +87,8 @@
             </div>
         </div>
 
-        <div class="card" onclick="openLightbox(['https://i.imgur.com/g3efDAd.jpeg','https://i.imgur.com/iF6EgXb.jpeg'])">
+        <!-- Card 3: System -->
+        <div class="card" onclick="openDriveFolder('system')">
             <h2>🛠️ System & Tech</h2>
             <div class="ss-container" id="ss3">
                 <img class="slide active" src="https://i.imgur.com/g3efDAd.jpeg">
@@ -93,12 +97,23 @@
         </div>
     </div>
 
+    <!-- Lightbox Modal -->
     <div id="lightbox" onclick="this.style.display='none'">
         <span class="close">&times;</span>
         <div id="lightbox-content"></div>
     </div>
 
     <script>
+      // ================= CONFIGURATION =================
+const API_KEY = 'AIzaSyB0fIi4GLS5F5Z20FJuf2JO29x2nU5rrSw'; // Replace with your fresh API key
+
+const DRIVE_FOLDERS = {
+    activities: '1MuxHw4UUTsGtrYPa648xU822QEnCa7Hdq',  // Club Activities Folder
+    members:    '1Xm7k88iXb93bKLOrVJb7H5Bvxg4dXmcg', // Members Folder
+    system:     '1Lfg85X814iHl3_pQeFeFyL9XuHLTgdV1'  // System and Tech Folder
+};
+// =================================================
+
         // Slideshow Engine
         function startSS(id) {
             let container = document.getElementById(id);
@@ -113,11 +128,33 @@
         }
         startSS('ss1'); startSS('ss2'); startSS('ss3');
 
-        // Lightbox Engine
-        function openLightbox(images) {
+        // Google Drive Fetcher + Lightbox Engine
+        async function openDriveFolder(categoryKey) {
+            const folderId = DRIVE_FOLDERS[categoryKey];
             const container = document.getElementById('lightbox-content');
-            container.innerHTML = images.map(src => `<img src="${src}" onclick="event.stopPropagation()">`).join('');
+            
+            // Show loading state inside the lightbox
+            container.innerHTML = '<p style="color: white; text-align: center; grid-column: 1/-1; font-size: 1.2rem;">Loading pictures from Google Drive...</p>';
             document.getElementById('lightbox').style.display = 'block';
+
+            // Query Google Drive API v3 for images in the folder
+            const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+mimeType+contains+'image/'&fields=files(id,name)&key=${API_KEY}`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.files && data.files.length > 0) {
+                    // Turn image IDs into direct thumbnails
+                    const imageUrls = data.files.map(file => `https://drive.google.com/thumbnail?id=${file.id}&sz=w1200`);
+                    container.innerHTML = imageUrls.map(src => `<img src="${src}" onclick="event.stopPropagation()">`).join('');
+                } else {
+                    container.innerHTML = '<p style="color: white; text-align: center; grid-column: 1/-1;">No images found in this Google Drive folder yet!</p>';
+                }
+            } catch (error) {
+                console.error('Drive API Error:', error);
+                container.innerHTML = '<p style="color: #ff6b6b; text-align: center; grid-column: 1/-1;">Failed to load images. Please check your API key & folder sharing permissions!</p>';
+            }
         }
 
         /* --- Combined Hybrid Easter Egg Trigger --- */
