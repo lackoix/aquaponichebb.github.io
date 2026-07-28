@@ -499,21 +499,31 @@
                 <p>Have questions about setting up your own ecosystem or want to collaborate with our club? Drop us a message!</p>
                 <div class="info-details">
                     <div>📍 <strong>Location:</strong> 1, Jalan Sungai Tiram 1, Kampung Sungai Tiram, 11900 Bayan Lepas, Pulau Pinang</div>
-                    <div>✉️ <strong>Email:</strong> aquaponicsclub@school.edu</div>
+                    <div>✉️ <strong>Email:</strong> aquaponichebb@gmail.com</div>
                 </div>
             </div>
-            <form class="contact-form" action="#" method="POST" onsubmit="alert('Thank you for reaching out!'); return false;">
+            
+            <form class="contact-form" action="https://api.web3forms.com/submit" method="POST">
+                <!-- Web3Forms Access Key -->
+                <input type="hidden" name="access_key" value="8bf01185-ee6c-48ce-8a03-927e89b3104a">
+                
+                <!-- Email Subject -->
+                <input type="hidden" name="subject" value="New Message from Aquaponics Club Website">
+                
+                <!-- Anti-spam Honeypot -->
+                <input type="checkbox" name="botcheck" style="display: none;">
+
                 <div class="form-group">
                     <label for="name">Name</label>
-                    <input type="text" id="name" placeholder="Your Full Name" required>
+                    <input type="text" id="name" name="name" placeholder="Your Full Name" required>
                 </div>
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email" placeholder="Your Email Address" required>
+                    <input type="email" id="email" name="email" placeholder="Your Email Address" required>
                 </div>
                 <div class="form-group">
                     <label for="message">Message</label>
-                    <textarea id="message" rows="5" placeholder="How can we help you?" required></textarea>
+                    <textarea id="message" name="message" rows="5" placeholder="How can we help you?" required></textarea>
                 </div>
                 <button type="submit" class="btn">Send Message</button>
             </form>
