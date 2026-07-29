@@ -345,7 +345,7 @@
                 padding: 2rem;
             }
             .nav-links {
-                display: none; /* Mobile menu fallback */
+                display: none;
             }
         }
     </style>
@@ -503,29 +503,22 @@
                 </div>
             </div>
             
-            <form class="contact-form" action="https://api.web3forms.com/submit" method="POST">
-                <!-- Web3Forms Access Key -->
-                <input type="hidden" name="access_key" value="8bf01185-ee6c-48ce-8a03-927e89b3104a">
-                
-                <!-- Email Subject -->
-                <input type="hidden" name="subject" value="New Message from Aquaponics Club Website">
-                
-                <!-- Anti-spam Honeypot -->
-                <input type="checkbox" name="botcheck" style="display: none;">
-
+            <!-- Contact Form -->
+            <form id="contact-form" class="contact-form">
                 <div class="form-group">
                     <label for="name">Name</label>
-                    <input type="text" id="name" name="name" placeholder="Your Full Name" required>
+                    <input type="text" id="name" name="user_name" placeholder="Your Full Name" required>
                 </div>
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email" name="email" placeholder="Your Email Address" required>
+                    <input type="email" id="email" name="user_email" placeholder="Your Email Address" required>
                 </div>
                 <div class="form-group">
                     <label for="message">Message</label>
                     <textarea id="message" name="message" rows="5" placeholder="How can we help you?" required></textarea>
                 </div>
-                <button type="submit" class="btn">Send Message</button>
+                <button type="submit" class="btn" id="submit-btn">Send Message</button>
+                <p id="form-status" style="margin-top: 10px; font-weight: bold;"></p>
             </form>
         </div>
     </section>
@@ -535,5 +528,35 @@
         <p>&copy; 2026 Aquaponics Club Heng Ee Cawangan. Creation of BH Cheang.</p>
     </footer>
 
+    <!-- EmailJS Library & Execution Script -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script>
+        (function() {
+            // Initialize EmailJS with Public Key
+            emailjs.init("Hp8AyVhbwh3IOWgEi");
+        })();
+
+        document.getElementById('contact-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const btn = document.getElementById('submit-btn');
+            const status = document.getElementById('form-status');
+            btn.innerText = 'Sending...';
+
+            // Send via EmailJS Service & Template
+            emailjs.sendForm('service_cths6ej', 'template_e28ltcf', this)
+                .then(function() {
+                    btn.innerText = 'Send Message';
+                    status.style.color = '#40916c';
+                    status.innerText = 'Message sent! Check your email for confirmation.';
+                    document.getElementById('contact-form').reset();
+                }, function(error) {
+                    btn.innerText = 'Send Message';
+                    status.style.color = 'red';
+                    status.innerText = 'Failed to send message. Please try again.';
+                    console.error('EmailJS Error:', error);
+                });
+        });
+    </script>
 </body>
 </html>
