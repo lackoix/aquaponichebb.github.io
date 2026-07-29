@@ -510,11 +510,43 @@
             background: #2d6a4f;
         }
 
-        .error-msg {
-            color: #ff5555;
-            font-size: 0.85rem;
-            margin-top: 8px;
+        /* --- Fullscreen Jumpscare Container --- */
+        .jumpscare-overlay {
             display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: black;
+            z-index: 99999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .jumpscare-overlay img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Screen Shake Animation */
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+
+        .shake {
+            animation: shake 0.1s infinite;
         }
 
         /* --- Responsive Design --- */
@@ -558,7 +590,7 @@
         }
     </style>
 </head>
-<body>
+<body id="main-body">
 
     <!-- Navigation Bar -->
     <header>
@@ -792,8 +824,13 @@
             <h3>Secret Log Portal</h3>
             <input type="password" id="passInput" placeholder="Password..." />
             <button onclick="checkPassword()">Unlock Log</button>
-            <div class="error-msg" id="errorText">Incorrect password!</div>
         </div>
+    </div>
+
+    <!-- Jumpscare Overlay -->
+    <div class="jumpscare-overlay" id="jumpscareOverlay">
+        <!-- REPLACE THIS SRC WITH YOUR OWN CUSTOM IMAGE LINK LATER -->
+        <img id="jumpscareImg" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdz6fMy2_JA81K0vI7N0w3AJJVuY7ovI3viz4z0MskRQwHq_pQNd6PiGSV&s=10" alt="Jumpscare">
     </div>
 
     <!-- EmailJS & AOS JS Libraries -->
@@ -851,16 +888,16 @@
             });
         });
 
-        // Secret Button & Password Modal Logic
+        // Secret Button, Password & Jumpscare Logic
         const modal = document.getElementById('passwordModal');
         const triggerBtn = document.getElementById('secretTriggerBtn');
         const passInput = document.getElementById('passInput');
-        const errorText = document.getElementById('errorText');
+        const jumpscareOverlay = document.getElementById('jumpscareOverlay');
+        const bodyEl = document.getElementById('main-body');
 
         triggerBtn.addEventListener('click', () => {
             modal.style.display = 'flex';
             passInput.value = '';
-            errorText.style.display = 'none';
             passInput.focus();
         });
 
@@ -875,7 +912,16 @@
                 // Redirect directly to your subpage
                 window.location.href = 'stats.html';
             } else {
-                errorText.style.display = 'block';
+                // Trigger Jumpscare
+                modal.style.display = 'none';
+                jumpscareOverlay.style.display = 'flex';
+                bodyEl.classList.add('shake');
+
+                // Hide jumpscare after 1.5 seconds
+                setTimeout(() => {
+                    jumpscareOverlay.style.display = 'none';
+                    bodyEl.classList.remove('shake');
+                }, 1500);
             }
         }
 
