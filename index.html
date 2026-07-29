@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aquaponics Club</title>
+    
+    <!-- AOS Library CSS (Animate On Scroll) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+
     <style>
         /* --- Global Styles --- */
         * {
@@ -18,6 +22,7 @@
             background-color: #f4f7f6;
             color: #333;
             line-height: 1.6;
+            overflow-x: hidden; /* Prevents unwanted horizontal scroll during entrance animations */
         }
 
         /* --- Navigation --- */
@@ -69,6 +74,15 @@
 
         .nav-links a:hover {
             color: #74c69d;
+        }
+
+        .hamburger {
+            display: none;
+            font-size: 1.8rem;
+            color: #d8f3dc;
+            background: none;
+            border: none;
+            cursor: pointer;
         }
 
         /* --- Sections General --- */
@@ -131,11 +145,12 @@
             text-decoration: none;
             border-radius: 5px;
             font-weight: 600;
-            transition: background 0.3s;
+            transition: background 0.3s, transform 0.2s;
         }
 
         .btn:hover {
             background-color: #2d6a4f;
+            transform: translateY(-2px);
         }
 
         .hero-image {
@@ -148,6 +163,36 @@
             height: auto;
             border-radius: 15px;
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        /* --- Product Showcase --- */
+        .product-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 15px;
+            max-width: 550px;
+            margin: 0 auto;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-top: 5px solid #40916c;
+        }
+
+        .product-badge {
+            display: inline-block;
+            background-color: #d8f3dc;
+            color: #1b4332;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .price-tag {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #1b4332;
+            margin: 1rem 0;
         }
 
         /* --- Gallery Section --- */
@@ -188,6 +233,59 @@
             font-size: 1.1rem;
         }
 
+        /* --- FAQ Accordion --- */
+        .faq-wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .faq-item {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        .faq-question {
+            width: 100%;
+            padding: 1.2rem;
+            text-align: left;
+            background: none;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1b4332;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            padding: 0 1.2rem;
+            color: #555;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 150px;
+            padding: 0 1.2rem 1.2rem 1.2rem;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        .faq-icon {
+            transition: transform 0.3s;
+            font-size: 1.2rem;
+        }
+
         /* --- Committee Chart Section --- */
         .chart-container {
             display: flex;
@@ -212,6 +310,12 @@
             width: 240px;
             text-align: center;
             border-top: 5px solid #40916c;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .member-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
         }
 
         .member-card.tier-1 { border-top-color: #1b4332; width: 280px; }
@@ -344,8 +448,25 @@
                 grid-template-columns: 1fr;
                 padding: 2rem;
             }
+            .hamburger {
+                display: block;
+            }
             .nav-links {
                 display: none;
+                flex-direction: column;
+                width: 100%;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                background-color: #1b4332;
+                padding: 1rem 0;
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .nav-links li {
+                margin: 1rem 0;
+                text-align: center;
             }
         }
     </style>
@@ -356,10 +477,12 @@
     <header>
         <nav class="navbar">
             <a href="#home" class="logo">Aquaponics<span>Club</span></a>
-            <ul class="nav-links">
+            <button class="hamburger" id="hamburger-btn">☰</button>
+            <ul class="nav-links" id="nav-links">
                 <li><a href="#home">Home</a></li>
+                <li><a href="#products">Products</a></li>
                 <li><a href="gallery.html">Gallery</a></li>
-                <li><a href="system.html">System</a></li>
+                <li><a href="#faq">FAQ</a></li>
                 <li><a href="#committee">Committee</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
@@ -368,47 +491,93 @@
 
     <!-- Home / Hero Section -->
     <section id="home">
-        <div class="hero-text">
+        <div class="hero-text" data-aos="fade-right">
             <h1>Cultivating the Future of Sustainable Farming</h1>
             <p>Welcome to the Aquaponics Club! We combine aquaculture (raising fish) and hydroponics (growing plants without soil) into one elegant, closed-loop ecosystem. Join us to learn, build, and innovate.</p>
             <a href="#contact" class="btn">Connect With Us</a>
             <a href="gallery.html" class="btn" style="background-color: #2d6a4f; margin-left: 10px;">View Gallery</a>
         </div>
-        <div class="hero-image">
+        <div class="hero-image" data-aos="fade-left">
             <img src="https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&w=600&q=80" alt="Aquaponics System">
+        </div>
+    </section>
+
+    <!-- Product Showcase Section -->
+    <section id="products">
+        <h2 class="section-title" data-aos="fade-up">Our Club Products</h2>
+        <div class="product-card" data-aos="zoom-in">
+            <span class="product-badge">House Production</span>
+            <h3>🐟 Brown Tilapia Fish Feed</h3>
+            <p style="margin-top: 0.8rem; color: #555;">High-protein, eco-friendly brown feed pellets formulated specifically for healthy tilapia growth in aquaponic systems.</p>
+            <div class="price-tag">RM 1.00 <span style="font-size: 1rem; color: #666; font-weight: normal;">/ 2 Packs</span></div>
+            <a href="#contact" class="btn">Order / Inquire</a>
         </div>
     </section>
 
     <!-- Gallery Section -->
     <section id="gallery">
-        <h2 class="section-title">Our Gallery</h2>
+        <h2 class="section-title" data-aos="fade-up">Our Gallery</h2>
         <div class="gallery-grid">
-            <div class="gallery-item">
+            <div class="gallery-item" data-aos="fade-up" data-aos-delay="100">
                 <img src="https://imgur.com/dc025c2e-6deb-4b13-832d-cc476efc81cf" alt="Hydroponic Greens">
                 <div class="gallery-caption">Our Hydroponic NFT System</div>
             </div>
-            <div class="gallery-item">
+            <div class="gallery-item" data-aos="fade-up" data-aos-delay="200">
                 <img src="https://imgur.com/b12e698e-895a-42b5-a734-9e2aa36a4f7c" alt="Fish Tank">
                 <div class="gallery-caption">Healthy Tilapia Tanks</div>
             </div>
-            <div class="gallery-item">
+            <div class="gallery-item" data-aos="fade-up" data-aos-delay="300">
                 <img src="https://images.unsplash.com/photo-1508615070457-7baebe4003ab?auto=format&fit=crop&w=500&q=80" alt="Seedlings">
                 <div class="gallery-caption">Sprouting New Seedlings</div>
             </div>
-            <div class="gallery-item">
+            <div class="gallery-item" data-aos="fade-up" data-aos-delay="400">
                 <img src="https://images.unsplash.com/photo-1536882240095-0379873feb4e?auto=format&fit=crop&w=500&q=80" alt="Water Testing">
                 <div class="gallery-caption">Weekly Water Quality Monitoring</div>
             </div>
         </div>
     </section>
 
+    <!-- FAQ Section -->
+    <section id="faq">
+        <h2 class="section-title" data-aos="fade-up">Frequently Asked Questions</h2>
+        <div class="faq-wrapper">
+            <div class="faq-item" data-aos="fade-up" data-aos-delay="100">
+                <button class="faq-question">
+                    What is aquaponics?
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Aquaponics is a combination of aquaculture (raising fish) and hydroponics (growing plants in water without soil). Fish waste provides organic nutrients for the plants, and the plants naturally filter the water for the fish.</p>
+                </div>
+            </div>
+            <div class="faq-item" data-aos="fade-up" data-aos-delay="200">
+                <button class="faq-question">
+                    How do I purchase the Tilapia feed?
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>You can fill out the contact form below or get in touch directly with our committee members. We offer 2 packs for RM1.00!</p>
+                </div>
+            </div>
+            <div class="faq-item" data-aos="fade-up" data-aos-delay="300">
+                <button class="faq-question">
+                    Can non-club members participate or visit?
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Yes! We welcome students and visitors who are interested in learning about sustainable urban farming. Reach out via our contact form to schedule a visit.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Committee Chart Section -->
     <section id="committee">
-        <h2 class="section-title">Committee Chart</h2>
+        <h2 class="section-title" data-aos="fade-up">Committee Chart</h2>
         <div class="chart-container">
             <!-- Tier 1: Leadership -->
             <div class="chart-row">
-                <div class="member-card tier-1">
+                <div class="member-card tier-1" data-aos="zoom-in">
                     <div class="member-avatar">👑</div>
                     <div class="member-role">Chairman</div>
                     <div class="member-name">Joyce Ooi Ro En</div>
@@ -418,29 +587,29 @@
             
             <!-- Tier 2: Vice Leadership & Core Executive -->
             <div class="chart-row">
-                <div class="member-card tier-2">
+                <div class="member-card tier-2" data-aos="fade-up" data-aos-delay="100">
                     <div class="member-avatar">📋</div>
                     <div class="member-role">Vice Chairman</div>
                     <div class="member-name">Chin Yi Jie</div>
                     <div class="member-class">T4S1</div>
                 </div>
-                <div class="member-card tier-2">
+                <div class="member-card tier-2" data-aos="fade-up" data-aos-delay="200">
                     <div class="member-avatar">✍️</div>
                     <div class="member-role">Secretary</div>
-                    <div class="member-name">Ooi Shi Ning</div>
+                    <div class="member-name">Victor Ng Jia Li</div>
                     <div class="member-class">T4S2</div>
                 </div>
-                <div class="member-card tier-2">
+                <div class="member-card tier-2" data-aos="fade-up" data-aos-delay="300">
                     <div class="member-avatar">✒️</div>
                     <div class="member-role">Vice Secretary</div>
-                    <div class="member-name">Yeap Jia Ying</div>
+                    <div class="member-name">Ooi Shi Ning</div>
                     <div class="member-class">T3A</div>
                 </div>
             </div>
             
             <!-- Tier 3: Financial Management -->
             <div class="chart-row">
-                <div class="member-card">
+                <div class="member-card" data-aos="fade-up" data-aos-delay="100">
                     <div class="member-avatar">💰</div>
                     <div class="member-role">Treasurer</div>
                     <div class="member-name">Ong Sim Yi</div>
@@ -450,37 +619,37 @@
 
             <!-- Tier 4: Working Committee (AJK) -->
             <div class="chart-row">
-                <div class="member-card">
+                <div class="member-card" data-aos="fade-up" data-aos-delay="100">
                     <div class="member-avatar">🛠️</div>
                     <div class="member-role">AJK</div>
                     <div class="member-name">Seow Kai En</div>
                     <div class="member-class">T4S1</div>
                 </div>
-                <div class="member-card">
+                <div class="member-card" data-aos="fade-up" data-aos-delay="150">
                     <div class="member-avatar">🛠️</div>
                     <div class="member-role">AJK</div>
                     <div class="member-name">Teoh Hong Rui</div>
                     <div class="member-class">T4S2</div>
                 </div>
-                <div class="member-card">
+                <div class="member-card" data-aos="fade-up" data-aos-delay="200">
                     <div class="member-avatar">🛠️</div>
                     <div class="member-role">AJK</div>
                     <div class="member-name">Oon Chong Yi</div>
                     <div class="member-class">T3J</div>
                 </div>
-                <div class="member-card">
+                <div class="member-card" data-aos="fade-up" data-aos-delay="250">
                     <div class="member-avatar">🛠️</div>
                     <div class="member-role">AJK</div>
                     <div class="member-name">Tan Shi Ting</div>
                     <div class="member-class">T2A</div>
                 </div>
-                <div class="member-card">
+                <div class="member-card" data-aos="fade-up" data-aos-delay="300">
                     <div class="member-avatar">🛠️</div>
                     <div class="member-role">AJK</div>
                     <div class="member-name">Yeoh Ke Xin</div>
                     <div class="member-class">T2A</div>
                 </div>
-                <div class="member-card">
+                <div class="member-card" data-aos="fade-up" data-aos-delay="350">
                     <div class="member-avatar">🛠️</div>
                     <div class="member-role">AJK</div>
                     <div class="member-name">Cheang Boon Hee</div>
@@ -492,8 +661,8 @@
 
     <!-- Contact Section -->
     <section id="contact">
-        <h2 class="section-title">Get in Touch</h2>
-        <div class="contact-wrapper">
+        <h2 class="section-title" data-aos="fade-up">Get in Touch</h2>
+        <div class="contact-wrapper" data-aos="fade-up">
             <div class="contact-info">
                 <h3>Connect With Us</h3>
                 <p>Have questions about setting up your own ecosystem or want to collaborate with our club? Drop us a message!</p>
@@ -528,14 +697,24 @@
         <p>&copy; 2026 Aquaponics Club Heng Ee Cawangan. Creation of BH Cheang.</p>
     </footer>
 
-    <!-- EmailJS Library & Script -->
+    <!-- EmailJS & AOS JS Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    
     <script>
+        // Initialize AOS animations
+        AOS.init({
+            duration: 800,   // Animation duration in ms
+            once: true,       // Whether animation should happen only once while scrolling down
+            offset: 100       // Offset (in px) from the original trigger point
+        });
+
+        // Initialize EmailJS
         (function() {
-            // Initialize EmailJS
             emailjs.init("Hp8AyVhbwh3IOWgEi");
         })();
 
+        // Contact Form Submission
         document.getElementById('contact-form').addEventListener('submit', function(event) {
             event.preventDefault();
             
@@ -543,7 +722,6 @@
             const status = document.getElementById('form-status');
             btn.innerText = 'Sending...';
 
-            // Send via EmailJS Service & Template
             emailjs.sendForm('service_cths6ej', 'template_e28ltcf', this)
                 .then(function() {
                     btn.innerText = 'Send Message';
@@ -556,6 +734,22 @@
                     status.innerText = 'Failed to send message. Please try again.';
                     console.error('EmailJS Error:', error);
                 });
+        });
+
+        // Mobile Menu Toggle
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const navLinks = document.getElementById('nav-links');
+
+        hamburgerBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // FAQ Accordion Logic
+        document.querySelectorAll('.faq-question').forEach(button => {
+            button.addEventListener('click', () => {
+                const faqItem = button.parentElement;
+                faqItem.classList.toggle('active');
+            });
         });
     </script>
 </body>
