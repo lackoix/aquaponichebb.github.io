@@ -166,15 +166,25 @@
         }
 
         /* --- Product Showcase --- */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            justify-content: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
         .product-card {
             background: white;
             padding: 2.5rem;
             border-radius: 15px;
-            max-width: 550px;
-            margin: 0 auto;
             text-align: center;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             border-top: 5px solid #40916c;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .product-badge {
@@ -186,6 +196,7 @@
             font-size: 0.85rem;
             font-weight: bold;
             margin-bottom: 1rem;
+            align-self: center;
         }
 
         .price-tag {
@@ -625,12 +636,28 @@
     <!-- Product Showcase Section -->
     <section id="products">
         <h2 class="section-title" data-aos="fade-up">Our Club Products</h2>
-        <div class="product-card" data-aos="zoom-in">
-            <span class="product-badge">House Production</span>
-            <h3>🐟 Brown Tilapia Fish Feed</h3>
-            <p style="margin-top: 0.8rem; color: #555;">High-protein, eco-friendly brown feed pellets formulated specifically for healthy tilapia growth in aquaponic systems.</p>
-            <div class="price-tag">RM 1.00 <span style="font-size: 1rem; color: #666; font-weight: normal;">/ 2 Packs</span></div>
-            <a href="#contact" class="btn">Order / Inquire</a>
+        <div class="products-grid">
+            <!-- Product 1: Fish Feed -->
+            <div class="product-card" data-aos="zoom-in" data-aos-delay="100">
+                <div>
+                    <span class="product-badge">House Production</span>
+                    <h3>🐟 Brown Tilapia Fish Feed</h3>
+                    <p style="margin-top: 0.8rem; color: #555;">High-protein, eco-friendly brown feed pellets formulated specifically for healthy tilapia growth in aquaponic systems.</p>
+                    <div class="price-tag">RM 1.00 <span style="font-size: 1rem; color: #666; font-weight: normal;">/ 2 Packs</span></div>
+                </div>
+                <a href="#contact" class="btn" style="margin-top: 1rem;">Order / Inquire</a>
+            </div>
+
+            <!-- Product 2: Quill -->
+            <div class="product-card" data-aos="zoom-in" data-aos-delay="200">
+                <div>
+                    <span class="product-badge">Pre-Order Special</span>
+                    <h3>🪶 Fresh / Processed Quails</h3>
+                    <p style="margin-top: 0.8rem; color: #555;">Sustainably farm-raised quails from our club facilities. Available for pre-order via our official order form.</p>
+                    <div class="price-tag">RM 12.00</div>
+                </div>
+                <a href="https://forms.gle/ggSDQxdjKqxg5s2X9" target="_blank" rel="noopener noreferrer" class="btn" style="margin-top: 1rem; background-color: #2d6a4f;">Pre-Order Now</a>
+            </div>
         </div>
     </section>
 
@@ -672,11 +699,11 @@
             </div>
             <div class="faq-item" data-aos="fade-up" data-aos-delay="200">
                 <button class="faq-question">
-                    How do I purchase the Tilapia feed?
+                    How do I purchase Tilapia feed or Quails?
                     <span class="faq-icon">+</span>
                 </button>
                 <div class="faq-answer">
-                    <p>You can fill out the contact form below or get in touch directly with our committee members. We offer 2 packs for RM1.00!</p>
+                    <p>You can pre-order quails directly using the Pre-Order Google Form button under our products, or send us a message via the contact form below for fish feed inquiries!</p>
                 </div>
             </div>
             <div class="faq-item" data-aos="fade-up" data-aos-delay="300">
@@ -716,14 +743,14 @@
                 <div class="member-card tier-2" data-aos="fade-up" data-aos-delay="200">
                     <div class="member-avatar">✍️</div>
                     <div class="member-role">Secretary</div>
-                    <div class="member-name">Ooi Shi Ning</div>
-                    <div class="member-class">T3A</div>
+                    <div class="member-name">Victor Ng Jia Li</div>
+                    <div class="member-class">T4S2</div>
                 </div>
                 <div class="member-card tier-2" data-aos="fade-up" data-aos-delay="300">
                     <div class="member-avatar">✒️</div>
                     <div class="member-role">Vice Secretary</div>
-                    <div class="member-name">Yeap Jia Ying</div>
-                    <div class="member-class">T2A</div>
+                    <div class="member-name">Ooi Shi Ning</div>
+                    <div class="member-class">T3A</div>
                 </div>
             </div>
             
