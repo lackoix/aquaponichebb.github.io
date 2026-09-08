@@ -46,10 +46,20 @@
         }
 
         .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             color: #40916c;
             font-size: 1.5rem;
             font-weight: bold;
             text-decoration: none;
+        }
+
+        .logo-img {
+            height: 40px;
+            width: auto;
+            object-fit: contain;
+            border-radius: 5px;
         }
 
         .logo span {
@@ -607,7 +617,10 @@
     <!-- Navigation Bar -->
     <header>
         <nav class="navbar">
-            <a href="#home" class="logo">Aquaponics<span>Club</span></a>
+            <a href="#home" class="logo">
+                <img src="https://i.imgur.com/DODTYDE.png" alt="Aquaponics Logo" class="logo-img">
+                Aquaponics<span>Club</span>
+            </a>
             <button class="hamburger" id="hamburger-btn">☰</button>
             <ul class="nav-links" id="nav-links">
                 <li><a href="#home">Home</a></li>
@@ -937,46 +950,56 @@
             if (e.target === modal) modal.style.display = 'none';
         });
 
-        function checkPassword() {
-            const targetPass = 'labuhee wan sui';
-            
-            if (passInput.value === targetPass) {
-                // Redirect directly to subpage
-                window.location.href = 'stats.html';
-            } else {
-                // Trigger Jumpscare with Image
-                modal.style.display = 'none';
-                jumpscareOverlay.style.display = 'flex';
-                bodyEl.classList.add('shake');
-
-                // Hide jumpscare after 1.5 seconds
-                setTimeout(() => {
-                    jumpscareOverlay.style.display = 'none';
-                    bodyEl.classList.remove('shake');
-                }, 1500);
-            }
-        }
-
+        // Allow submitting password with Enter key
         passInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') checkPassword();
         });
-    </script>
 
-    <!-- Default Statcounter code for aquaponic https://lackoix.github.io/aquaponichebb.github.io -->
-    <script type="text/javascript">
-    var sc_project=13338884; 
-    var sc_invisible=1; 
-    var sc_security="7634eba9"; 
-    </script>
-    <script type="text/javascript" src="https://www.statcounter.com/counter/counter.js" async></script>
-    <noscript>
-        <div class="statcounter">
-            <a title="Web Analytics" href="https://statcounter.com/" target="_blank">
-                <img class="statcounter" src="https://c.statcounter.com/13338884/0/7634eba9/1/" alt="Web Analytics" referrerPolicy="no-referrer-when-downgrade">
-            </a>
-        </div>
-    </noscript>
-    <!-- End of Statcounter Code -->
+        function checkPassword() {
+            modal.style.display = 'none';
 
+            // Trigger Jumpscare
+            jumpscareOverlay.style.display = 'flex';
+            bodyEl.classList.add('shake');
+
+            // Web Audio API Synthesizer (Scream/Noise Effect)
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // Create Sawtooth Oscillator for harsh tone
+                const osc = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 1.2);
+                
+                gainNode.gain.setValueAtTime(1, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1.2);
+                
+                osc.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                
+                osc.start();
+                osc.stop(audioCtx.currentTime + 1.2);
+            } catch (err) {
+                console.error("Audio playback error:", err);
+            }
+
+            // Attempt Fullscreen
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen().catch(() => {});
+            }
+
+            // Reset after 2.5 seconds
+            setTimeout(() => {
+                jumpscareOverlay.style.display = 'none';
+                bodyEl.classList.remove('shake');
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().catch(() => {});
+                }
+            }, 2500);
+        }
+    </script>
 </body>
 </html>
