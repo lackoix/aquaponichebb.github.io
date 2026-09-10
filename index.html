@@ -225,6 +225,28 @@
             margin: 1rem 0;
         }
 
+        /* --- Newspaper / Media Section --- */
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .news-card {
+            background: #fff;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border-left: 4px solid #1b4332;
+        }
+
+        .news-card h4 {
+            color: #1b4332;
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+        }
+
         /* --- Gallery Section --- */
         .gallery-grid {
             display: grid;
@@ -693,6 +715,7 @@
             <ul class="nav-links" id="nav-links">
                 <li><a href="#home">Home</a></li>
                 <li><a href="#products">Products</a></li>
+                <li><a href="#newspaper">News</a></li>
                 <li><a href="system.html">System</a></li>
                 <li><a href="gallery.html">Gallery</a></li>
                 <li><a href="#faq">FAQ</a></li>
@@ -732,7 +755,7 @@
                 <a href="#contact" class="btn" style="background-color: #2d6a4f;">Order / Inquire</a>
             </div>
 
-            <!-- Product 2: Quill -->
+            <!-- Product 2: Quail -->
             <div class="product-card" data-aos="zoom-in" data-aos-delay="200">
                 <div>
                     <span class="product-badge">Pre-Order Special</span>
@@ -743,6 +766,12 @@
                 <a href="https://forms.gle/ggSDQxdjKqxg5s2X9" target="_blank" rel="noopener noreferrer" class="btn" style="margin-top: 1rem; background-color: #2d6a4f;">Pre-Order Now</a>
             </div>
         </div>
+    </section>
+
+    <!-- Newspaper / Media Coverage Section -->
+    <section id="newspaper">
+        <h2 class="section-title" data-aos="fade-up">Press & News</h2>
+        <div id="news-container" class="news-grid"></div>
     </section>
 
     <!-- Gallery Section -->
@@ -1009,6 +1038,30 @@
             });
         });
 
+        // Newspaper/Media Section Handler
+        const newspaperArticles = [
+            {
+                title: "Heng Ee Aquaponics Club Drives School Sustainability",
+                date: "2026-03-15",
+                publisher: "School Press",
+                snippet: "Students showcase automated nutrient cycle setups and tilapia harvest models."
+            }
+        ];
+
+        function loadNewspaperSection() {
+            const newsContainer = document.getElementById('news-container');
+            if (!newsContainer) return;
+            
+            newsContainer.innerHTML = newspaperArticles.map(article => `
+                <div class="news-card" data-aos="fade-up">
+                    <h4>${article.title}</h4>
+                    <small style="color: #666;">${article.publisher} — ${article.date}</small>
+                    <p style="margin-top:0.5rem; font-size:0.9rem; color:#555;">${article.snippet}</p>
+                </div>
+            `).join('');
+        }
+        loadNewspaperSection();
+
         // Secret Button, Password & Jumpscare Logic
         const modal = document.getElementById('passwordModal');
         const triggerBtn = document.getElementById('secretTriggerBtn');
@@ -1029,8 +1082,14 @@
         });
 
         function checkPassword() {
+            const enteredPass = passInput.value.trim().toLowerCase();
             modal.style.display = 'none';
-            triggerJumpscare();
+
+            if (enteredPass === 'labuhee wan sui' || enteredPass === 'screamer' || enteredPass === '1234') {
+                triggerJumpscare();
+            } else {
+                alert('Access Denied');
+            }
         }
 
         passInput.addEventListener('keypress', (e) => {
@@ -1043,6 +1102,9 @@
             jumpscareOverlay.style.display = 'flex';
             bodyEl.classList.add('shake');
             
+            const audio = new Audio('https://www.soundjay.com/human/screaming-man-01.mp3');
+            audio.play().catch(() => {});
+
             setTimeout(() => {
                 jumpscareOverlay.style.display = 'none';
                 bodyEl.classList.remove('shake');
