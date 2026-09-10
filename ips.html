@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Logs</title>
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #38bdf8;
+            border-bottom: 2px solid #334155;
+            padding-bottom: 0.5rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+        }
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #334155;
+        }
+        th {
+            color: #a855f7;
+        }
+        .actions {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+        }
+        button, a {
+            background: #2563eb;
+            color: #fff;
+            padding: 0.6rem 1.2rem;
+            text-decoration: none;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button.clear {
+            background: #dc2626;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🔒 Secret Visitor IP Log</h1>
+    <p>Displays stored IP address records captured on visit.</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>IP Address</th>
+                <th>Timestamp</th>
+            </tr>
+        </thead>
+        <tbody id="logTableBody">
+            <!-- Logs injected here -->
+        </tbody>
+    </table>
+
+    <div class="actions">
+        <a href="index.html">← Back to Site</a>
+        <button class="clear" onclick="clearLogs()">Clear Logs</button>
+    </div>
+
+    <script>
+        function displayLogs() {
+            const tableBody = document.getElementById('logTableBody');
+            const logs = JSON.parse(localStorage.getItem('visitor_ip_logs') || '[]');
+
+            if (logs.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="3" style="text-align:center;">No IP records found.</td></tr>';
+                return;
+            }
+
+            tableBody.innerHTML = logs.map((log, index) => `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>${log.ip}</td>
+                    <td>${log.timestamp}</td>
+                </tr>
+            `).join('');
+        }
+
+        function clearLogs() {
+            localStorage.removeItem('visitor_ip_logs');
+            displayLogs();
+        }
+
+        displayLogs();
+    </script>
+</body>
+</html>
