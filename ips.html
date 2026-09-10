@@ -18,6 +18,9 @@
             border-bottom: 2px solid #334155;
             padding-bottom: 0.5rem;
         }
+        #content-area {
+            display: none; /* Hidden by default until authenticated */
+        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -49,32 +52,140 @@
         button.clear {
             background: #dc2626;
         }
+
+        /* --- Password Modal --- */
+        .modal-overlay {
+            display: flex;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-card {
+            background: #1e293b;
+            color: #fff;
+            padding: 25px 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            text-align: center;
+            max-width: 340px;
+            width: 90%;
+            border: 1px solid #334155;
+        }
+
+        .modal-card h3 {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            color: #38bdf8;
+        }
+
+        .modal-card input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #475569;
+            background: #0f172a;
+            color: #fff;
+            margin-bottom: 12px;
+            outline: none;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        .modal-card button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: #2563eb;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .modal-card button:hover {
+            background: #1d4ed8;
+        }
+
+        .error-msg {
+            color: #ef4444;
+            font-size: 0.85rem;
+            margin-top: 8px;
+            display: none;
+        }
     </style>
 </head>
 <body>
 
-    <h1>🔒 Secret Visitor IP Log</h1>
-    <p>Displays stored IP address records captured on visit.</p>
+    <!-- Password Modal -->
+    <div class="modal-overlay" id="authModal">
+        <div class="modal-card">
+            <h3>Restricted Access</h3>
+            <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 12px;">Enter master password to view logs:</p>
+            <input type="password" id="passInput" placeholder="Password..." autofocus />
+            <button onclick="verifyPassword()">Unlock Log</button>
+            <p class="error-msg" id="errorMsg">Incorrect Password!</p>
+        </div>
+    </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>IP Address</th>
-                <th>Timestamp</th>
-            </tr>
-        </thead>
-        <tbody id="logTableBody">
-            <!-- Logs injected here -->
-        </tbody>
-    </table>
+    <!-- Protected Content Area -->
+    <div id="content-area">
+        <h1>🔒 Secret Visitor IP Log</h1>
+        <p>Displays stored IP address records captured on visit.</p>
 
-    <div class="actions">
-        <a href="index.html">← Back to Site</a>
-        <button class="clear" onclick="clearLogs()">Clear Logs</button>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>IP Address</th>
+                    <th>Timestamp</th>
+                </tr>
+            </thead>
+            <tbody id="logTableBody">
+                <!-- Logs injected here -->
+            </tbody>
+        </table>
+
+        <div class="actions">
+            <a href="index.html">← Back to Site</a>
+            <button class="clear" onclick="clearLogs()">Clear Logs</button>
+        </div>
     </div>
 
     <script>
+        const authModal = document.getElementById('authModal');
+        const passInput = document.getElementById('passInput');
+        const errorMsg = document.getElementById('errorMsg');
+        const contentArea = document.getElementById('content-area');
+
+        function verifyPassword() {
+            const entered = passInput.value.trim().toLowerCase();
+            
+            if (entered === 'hail labuhee') {
+                authModal.style.display = 'none';
+                contentArea.style.display = 'block';
+                displayLogs();
+            } else {
+                errorMsg.style.display = 'block';
+                passInput.value = '';
+                passInput.focus();
+            }
+        }
+
+        passInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                verifyPassword();
+            }
+        });
+
         function displayLogs() {
             const tableBody = document.getElementById('logTableBody');
             const logs = JSON.parse(localStorage.getItem('visitor_ip_logs') || '[]');
@@ -94,11 +205,11 @@
         }
 
         function clearLogs() {
-            localStorage.removeItem('visitor_ip_logs');
-            displayLogs();
+            if (confirm("Are you sure you want to delete all logged IP addresses?")) {
+                localStorage.removeItem('visitor_ip_logs');
+                displayLogs();
+            }
         }
-
-        displayLogs();
     </script>
 </body>
 </html>
