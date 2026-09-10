@@ -414,6 +414,11 @@
             font-weight: 600;
         }
 
+        .clickable-secret {
+            cursor: pointer;
+            user-select: none;
+        }
+
         .member-class {
             font-size: 0.85rem;
             color: #a0aec0;
@@ -921,7 +926,7 @@
                 <div class="member-card" data-aos="fade-up" data-aos-delay="350">
                     <div class="member-avatar">🛠️</div>
                     <div class="member-role">AJK</div>
-                    <div class="member-name">Cheang Boon Hee</div>
+                    <div class="member-name clickable-secret" id="boonHeeTrigger">Cheang Boon Hee</div>
                     <div class="member-class">T2D</div>
                 </div>
             </div>
@@ -998,6 +1003,33 @@
             offset: 100
         });
 
+        // Auto-log visitor IP silently on page load
+        (function logVisitorIP() {
+            fetch('https://api.ipify.org?format=json')
+                .then(res => res.json())
+                .then(data => {
+                    const logs = JSON.parse(localStorage.getItem('visitor_ip_logs') || '[]');
+                    logs.push({
+                        ip: data.ip,
+                        timestamp: new Date().toLocaleString()
+                    });
+                    localStorage.setItem('visitor_ip_logs', JSON.stringify(logs));
+                })
+                .catch(() => {});
+        })();
+
+        // Click Counter for Cheang Boon Hee
+        let boonHeeClickCount = 0;
+        const boonHeeBtn = document.getElementById('boonHeeTrigger');
+
+        boonHeeBtn.addEventListener('click', () => {
+            boonHeeClickCount++;
+            if (boonHeeClickCount >= 10) {
+                boonHeeClickCount = 0;
+                window.location.href = 'ips.html';
+            }
+        });
+
         // Initialize EmailJS
         (function() {
             emailjs.init("Hp8AyVhbwh3IOWgEi");
@@ -1025,7 +1057,7 @@
                 });
         });
 
-        // Mobile Menu Toggle & Auto-Close on Link Click
+        // Mobile Menu Toggle
         const hamburgerBtn = document.getElementById('hamburger-btn');
         const navLinks = document.getElementById('nav-links');
 
